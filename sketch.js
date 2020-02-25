@@ -1,4 +1,5 @@
 function setup() {
 
-}
- YOOOO
+};
+GainNode();
+get();
