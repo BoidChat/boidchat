@@ -1,6 +1,4 @@
 var scene, camera, render, controls;
-const mouse = new THREE.Vector2();
-const target = new THREE.Vector2();
 class Boid {
 	constructor(object, name, id) {
 		this.object = object;
@@ -35,6 +33,9 @@ document.body.appendChild(renderer.domElement);
 window.addEventListener('resize', onResize, false);
 
 controls = new PointerLockControls( camera, document.body );
+controls.isLocked = true;
+
+scene.add( controls.getObject() );
 
 let boidai = [];
 addBoids();
@@ -66,7 +67,6 @@ function animate() {
     camera.position.x = boidai[14].object.position.x;
     camera.position.y = boidai[0].object.position.y;
     camera.position.z = boidai[0].object.position.z + 10;
-
 	renderer.render(scene, camera);
 }
 animate();
