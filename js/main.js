@@ -1,5 +1,3 @@
-import * as THREE from './js/libraries/three.js';
-
 var scene, camera, render;
 const mouse = new THREE.Vector2();
 const target = new THREE.Vector2();
@@ -14,7 +12,7 @@ class Boid {
 scene = new THREE.Scene();
 scene.background = new THREE.Color(0xffffff);
 
-camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera.position.z = 5;
 
 var geometry = new THREE.BoxGeometry();
@@ -37,24 +35,30 @@ function addBoids() {
 	}
 }
 
-function onMouseMove(event) {
+function onMouseMove( event ) {
 
-	mouse.x = (event.clientX - windowHalf.x);
-	mouse.y = (event.clientY - windowHalf.x);
+	mouse.x = ( event.clientX - (window.innerHeight / 2) );
+	mouse.y = ( event.clientY - (window.innerHeight / 2) );
 
 }
 
-function onResize(event) {
+function onMouseWheel( event ) {
+
+  camera.position.z += event.deltaY * 0.1; // move camera along z-axis
+
+}
+
+function onResize( event ) {
 
 	const width = window.innerWidth;
 	const height = window.innerHeight;
-
-	windowHalf.set(width / 2, height / 2);
-
-	camera.aspect = width / height;
+  
+  windowHalf.set( width / 2, height / 2 );
+	
+  camera.aspect = width / height;
 	camera.updateProjectionMatrix();
-	renderer.setSize(width, height);
-
+	renderer.setSize( width, height );
+				
 }
 
 function animate() {
@@ -62,12 +66,14 @@ function animate() {
 	for (var i = 0; i < boidai.length; i++) {
 		boidai[i].object.rotation.x += 0.05;
 		boidai[i].object.rotation.y += 0.05;
-	}
-	target.x = (1 - mouse.x) * 0.002;
-	target.y = (1 - mouse.y) * 0.002;
+    }
+    
+    target.x = ( 1 - mouse.x ) * 0.002;
+    target.y = ( 1 - mouse.y ) * 0.002;
+    
+    camera.rotation.x += 0.05 * ( target.y - camera.rotation.x );
+    camera.rotation.y += 0.05 * ( target.x - camera.rotation.y );
 
-	camera.rotation.x += 0.05 * (target.y - camera.rotation.x);
-	camera.rotation.y += 0.05 * (target.x - camera.rotation.y);
 	renderer.render(scene, camera);
 }
 animate();
