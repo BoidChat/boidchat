@@ -1,4 +1,4 @@
-var scene, camera, render;
+var scene, camera, render, controls;
 const mouse = new THREE.Vector2();
 const target = new THREE.Vector2();
 class Boid {
@@ -32,8 +32,9 @@ renderer = new THREE.WebGLRenderer({antialias: true});
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
-document.addEventListener('mousemove', onMouseMove, true);
 window.addEventListener('resize', onResize, false);
+
+controls = new PointerLockControls( camera, document.body );
 
 let boidai = [];
 addBoids();
@@ -43,19 +44,6 @@ function addBoids() {
 		boidai[i].object.position.x = 2 * i;
 		scene.add(boidai[i].object);
 	}
-}
-
-function onMouseMove( event ) {
-
-	mouse.x = ( event.clientX - (window.innerWidth / 2) );
-	mouse.y = ( event.clientY - (window.innerHeight / 2) );
-
-}
-
-function onMouseWheel( event ) {
-
-  camera.position.z += event.deltaY * 0.1; // move camera along z-axis
-
 }
 
 function onResize( event ) {
@@ -78,12 +66,6 @@ function animate() {
     camera.position.x = boidai[14].object.position.x;
     camera.position.y = boidai[0].object.position.y;
     camera.position.z = boidai[0].object.position.z + 10;
-    
-    target.x = ( 1 - mouse.x ) * 0.004;
-    target.y = ( 1 - mouse.y ) * 0.004;
-    
-    camera.rotation.x += 0.1 * (target.y - camera.rotation.x);
-    camera.rotation.y += 0.1 * (target.x - camera.rotation.y);
 
 	renderer.render(scene, camera);
 }
