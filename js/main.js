@@ -10,7 +10,16 @@ class Boid {
 }
 
 scene = new THREE.Scene();
-scene.background = new THREE.Color(0xffffff);
+scene.background = new THREE.CubeTextureLoader()
+	.setPath( './images/panorama/' )
+	.load( [
+		'px.png',
+		'nx.png',
+		'py.png',
+		'ny.png',
+		'pz.png',
+		'nz.png'
+	] );
 
 camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera.position.z = 5;
