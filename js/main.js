@@ -10,16 +10,17 @@ class Boid {
 }
 
 scene = new THREE.Scene();
-scene.background = new THREE.CubeTextureLoader()
-	.setPath( './images/panorama/' )
-	.load( [
-		'px.png',
-		'nx.png',
-		'py.png',
-		'ny.png',
-		'pz.png',
-		'nz.png'
-	] );
+var cubeTexture = new THREE.CubeTextureLoader()
+.setPath( './images/panorama/' )
+.load( [
+    'px.png',
+    'nx.png',
+    'py.png',
+    'ny.png',
+    'pz.png',
+    'nz.png'
+] );
+scene.background = cubeTexture;
 
 camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera.position.z = 5;
@@ -46,7 +47,7 @@ function addBoids() {
 
 function onMouseMove( event ) {
 
-	mouse.x = ( event.clientX - (window.innerHeight / 2) );
+	mouse.x = ( event.clientX - (window.innerWidth / 2) );
 	mouse.y = ( event.clientY - (window.innerHeight / 2) );
 
 }
@@ -61,10 +62,8 @@ function onResize( event ) {
 
 	const width = window.innerWidth;
 	const height = window.innerHeight;
-  
-  windowHalf.set( width / 2, height / 2 );
 	
-  camera.aspect = width / height;
+    camera.aspect = width / height;
 	camera.updateProjectionMatrix();
 	renderer.setSize( width, height );
 				
@@ -74,14 +73,17 @@ function animate() {
 	requestAnimationFrame(animate);
 	for (var i = 0; i < boidai.length; i++) {
 		boidai[i].object.rotation.x += 0.05;
-		boidai[i].object.rotation.y += 0.05;
+        boidai[i].object.rotation.y += 0.05;
     }
+    camera.position.x = boidai[14].object.position.x;
+    camera.position.y = boidai[0].object.position.y;
+    camera.position.z = boidai[0].object.position.z + 10;
     
-    target.x = ( 1 - mouse.x ) * 0.002;
-    target.y = ( 1 - mouse.y ) * 0.002;
+    target.x = ( 1 - mouse.x ) * 0.004;
+    target.y = ( 1 - mouse.y ) * 0.004;
     
-    camera.rotation.x += 0.05 * ( target.y - camera.rotation.x );
-    camera.rotation.y += 0.05 * ( target.x - camera.rotation.y );
+    camera.rotation.x += 0.1 * (target.y - camera.rotation.x);
+    camera.rotation.y += 0.1 * (target.x - camera.rotation.y);
 
 	renderer.render(scene, camera);
 }
