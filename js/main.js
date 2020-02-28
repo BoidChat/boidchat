@@ -43,6 +43,8 @@ function addBoids() {
 	for (var i = 0; i < 30; i++) {
 		boidai[i] = new Boid(new THREE.Mesh(geometry, material), "Boidas" + i, i);
 		boidai[i].object.position.x = 10 * i;
+		boidai[i].object.position.y = 10;
+		boidai[i].object.position.z = 0;
 		scene.add(boidai[i].object);
 	}
 }
@@ -65,14 +67,14 @@ function animate() {
 	for (var i = 0; i < boidai.length; i++) {
 		boidai[i].object.rotation.x += 0.05;
         boidai[i].object.rotation.y += 0.05;
-        boidai[i].object.position.x -= Math.sin(a) * 0.6;
+		boidai[i].object.position.y -= Math.sin(a) * 0.6 * (i+1);
+		//boidai[i].object.position.z -= Math.sin(a) * 0.6 * (i+1);
+		boidai[i].object.position.x -= Math.sin(a) * 0.6 * (i+1);
     }
     // scene.rotation.x += Math.sin(a) * 0.1; // wonky ass stuff
     // scene.rotation.y += 0.05;
     a += 0.01;
-    //scene.rotation.y += 0.02;
-    camera.position.y = boidai[0].object.position.y;
-    camera.position.z = boidai[0].object.position.z + 10;
+    camera.position.y = 10;
 	renderer.render(scene, camera);
 }
 animate();
