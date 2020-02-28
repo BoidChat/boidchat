@@ -23,7 +23,7 @@ scene.background = cubeTexture;
 camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera.position.z = 5;
 
-var geometry = new THREE.BoxGeometry();
+var geometry = new THREE.BoxGeometry(1,1,1);
 var material = new THREE.MeshNormalMaterial();
 
 renderer = new THREE.WebGLRenderer({antialias: true});
@@ -42,7 +42,7 @@ addBoids();
 function addBoids() {
 	for (var i = 0; i < 30; i++) {
 		boidai[i] = new Boid(new THREE.Mesh(geometry, material), "Boidas" + i, i);
-		boidai[i].object.position.x = 2 * i;
+		boidai[i].object.position.x = 10 * i;
 		scene.add(boidai[i].object);
 	}
 }
@@ -58,13 +58,19 @@ function onResize( event ) {
 				
 }
 
+var a = 0;
+
 function animate() {
 	requestAnimationFrame(animate);
 	for (var i = 0; i < boidai.length; i++) {
 		boidai[i].object.rotation.x += 0.05;
         boidai[i].object.rotation.y += 0.05;
+        boidai[i].object.position.x -= Math.sin(a) * 0.6;
     }
-    camera.position.x = boidai[14].object.position.x;
+    // scene.rotation.x += Math.sin(a) * 0.1; // wonky ass stuff
+    // scene.rotation.y += 0.05;
+    a += 0.01;
+    //scene.rotation.y += 0.02;
     camera.position.y = boidai[0].object.position.y;
     camera.position.z = boidai[0].object.position.z + 10;
 	renderer.render(scene, camera);
