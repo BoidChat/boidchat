@@ -1,0 +1,29 @@
+{
+	"name": "boidchat",
+	"version": "1.0.0",
+	"description": "",
+	"dependencies": {
+		"@types/opn": "^5.5.0",
+		"express": "^4.17.1",
+		"opn": "^6.0.0",
+		"socket.io": "^2.3.0",
+		"three": "^0.113.2"
+	},
+	"devDependencies": {},
+	"scripts": {
+		"start": "node server.js",
+		"debug": "node server.js",
+		"dev": "node server.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/BoidChat/boidchat.git"
+	},
+	"author": "",
+	"license": "",
+	"bugs": {
+		"url": "https://github.com/BoidChat/boidchat/issues"
+	},
+	"homepage": "https://github.com/BoidChat/boidchat#readme",
+	"main": "server.js"
+}
