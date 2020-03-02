@@ -7,11 +7,29 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 const controls = new THREE.OrbitControls(camera, renderer.domElement);
 
-const boid_geometry = new THREE.SphereGeometry(0.1);
-const boid_material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
-const main_boid = new THREE.Mesh(boid_geometry, boid_material);
-scene.add(main_boid);
 
+//<<<<<<<<<<<<<<template boid
+const template_boid_geometry = new THREE.Geometry();
+template_boid_geometry.vertices.push(
+  new THREE.Vector3(0, 0, -0.4),        // 0
+  new THREE.Vector3( 0.4,-0.2, 1),   // 1
+  new THREE.Vector3(-0.4, -0.2, 1),  // 2
+  new THREE.Vector3( 0, 0.6, 0.9)    // 3
+);
+template_boid_geometry.faces.push(
+	new THREE.Face3(0, 1, 2), //bottom
+	new THREE.Face3(0, 3, 1), //right
+	new THREE.Face3(0, 2, 3), //left
+	new THREE.Face3(1, 3, 2), //back
+  );
+  const template_boid_material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+  const template_boid = new THREE.Mesh(template_boid_geometry, template_boid_material); 
+//>>>>>>>>>>>>>>template boid
+
+
+
+
+main_boid = template_boid.clone();
 add_figures();
 
 function add_figures(){
@@ -57,7 +75,7 @@ socket.on('mouse', (_mouse) => {
 const animate = () => {
 	requestAnimationFrame(animate);
 	camera_dist = 5;
-	// main_boid.position.x += 0.02; /test
+	// main_boid.position.z -= 0.02; //test
 	x_rotation = ((mouse.y / window.innerHeight) - 0.5) * Math.PI * 2;
 	y_rotation = ((mouse.x / window.innerWidth) - 0.5) * Math.PI * 2;
 
