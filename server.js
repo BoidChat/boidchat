@@ -21,5 +21,3 @@ io.sockets.on('connection', (socket) => {
 		//io.sockets.emit('mouse', mouse);
 	});
 });
-
-opn('http://' + hostname + ':' + port + '/');
