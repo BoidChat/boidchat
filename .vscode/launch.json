@@ -17,7 +17,7 @@
 		},
 		{
 			"name": "Client",
-			"type": "edge",
+			"type": "chrome",
 			"request": "launch",
 			"url": "http://localhost:3000/",
 			"webRoot": "${workspaceFolder}/public/",

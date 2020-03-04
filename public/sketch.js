@@ -15,6 +15,17 @@ const boid_material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
 const main_boid = new THREE.Mesh(boid_geometry, boid_material);
 scene.add(main_boid);
 
+window.addEventListener( 'resize', onWindowResize, false );
+
+function onWindowResize() {
+
+	SCREEN_WIDTH = window.innerWidth;
+	SCREEN_HEIGHT = window.innerHeight;
+
+	renderer.setSize( SCREEN_WIDTH, SCREEN_HEIGHT );
+
+}
+
 add_figures();
 
 function add_figures() {
