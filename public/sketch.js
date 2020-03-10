@@ -18,12 +18,10 @@ scene.add(main_boid);
 window.addEventListener( 'resize', onWindowResize, false );
 
 function onWindowResize() {
+	camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
 
-	SCREEN_WIDTH = window.innerWidth;
-	SCREEN_HEIGHT = window.innerHeight;
-
-	renderer.setSize( SCREEN_WIDTH, SCREEN_HEIGHT );
-
+    renderer.setSize( window.innerWidth, window.innerHeight );
 }
 
 add_figures();
