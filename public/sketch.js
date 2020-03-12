@@ -7,7 +7,6 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 const controls = new THREE.OrbitControls(camera, renderer.domElement);
 
-
 //<<<<<<<<<<<<<<template boid
 const template_boid_geometry = new THREE.Geometry();
 template_boid_geometry.vertices.push(
@@ -28,8 +27,19 @@ template_boid_geometry.faces.push(
 
 
 
+//<<<<<<<<<<<<<should be on the server
+var boid_env = new Enviroment();
+for(var i = 0; i < 100; i++){
+	// let b_geom = template_boid.clone();
+	boid = new Boid(template_boid.clone(), "Boid Nr." + i, i);
+	scene.add(boid.geom);
+	boid_env.add_boid(boid);
+}
+main_boid = boid_env.population[0];
+main_boid.geom.rotation.reorder("YXZ");
+//>>>>>>>>>>>>>should be on the server
 
-main_boid = template_boid.clone();
+
 add_figures();
 
 function add_figures(){
@@ -70,22 +80,53 @@ onmousemove = (e) => {
 socket.on('mouse', (_mouse) => {
 	mouse.x = _mouse.x;
 	mouse.y = _mouse.y;
-});
+})
 
+var t = 0.01;
 const animate = () => {
 	requestAnimationFrame(animate);
-	camera_dist = 5;
-	// main_boid.position.z -= 0.02; //test
-	x_rotation = ((mouse.y / window.innerHeight) - 0.5) * Math.PI * 2;
-	y_rotation = ((mouse.x / window.innerWidth) - 0.5) * Math.PI * 2;
+	//<<<<<<<<<<other clients
 
-	camera.position.x = main_boid.position.x + Math.cos(0.5 * x_rotation) * camera_dist * Math.sin(-y_rotation);
-	camera.position.z = main_boid.position.z + Math.cos(0.5 * x_rotation) * camera_dist * Math.cos(-y_rotation);
-	camera.position.y = main_boid.position.y + camera_dist * Math.sin(0.5 * x_rotation);
+	for(var i = 1; i < boid_env.population.length; i++){
+		boid_env.population[i].live(boid_env);
+		var dir_vect = boid_env.population[i].velocity.clone().normalize();
+		// boid_env.population[i].geom.rotation.setFromQuaternion(two_vectors_to_quaternion(new THREE.Vector3(0, 0, -1), dir_vect));
+		boid_env.population[i].geom.rotation.setFromQuaternion((new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 0, -1), dir_vect)));
+	}
+	//>>>>>>>>>>other clients
+
+	// boid_env.population[0].position.set(5, 5, 5);
+	boid_env.population[0].live(boid_env);
+	// console.log(main_boid.velocity);
+	var dir_vect = boid_env.population[0].velocity.clone().normalize();
+	var body_x_matrix = (new THREE.Matrix4()).makeRotationFromQuaternion((new THREE.Quaternion()).setFromUnitVectors(new THREE.Vector3(0, 0, -1), (new THREE.Vector3(0, dir_vect.y, -1)).normalize()));
+	var body_y_matrix = (new THREE.Matrix4()).makeRotationFromQuaternion((new THREE.Quaternion()).setFromUnitVectors(new THREE.Vector3(0, 0, -1), (new THREE.Vector3(dir_vect.x, 0, dir_vect.z)).normalize()));
+	// boid_env.population[0].geom.rotation.setFromQuaternion(two_vectors_to_quaternion(new THREE.Vector3(0, 0, -1), dir_vect)); //old version
+	boid_env.population[0].geom.rotation.setFromRotationMatrix(body_y_matrix.multiply(body_x_matrix));
+
+	camera_dist = 10;
+	var x_rotation = ((mouse.y / window.innerHeight) - 0.5) * Math.PI * 2;
+	var y_rotation = ((mouse.x / window.innerWidth) - 0.5) * Math.PI * 2;
+	//old version
+	// camera.position.x = main_boid.position.x + Math.cos(0.5 * x_rotation) * camera_dist * Math.sin(-y_rotation);
+	// camera.position.z = main_boid.position.z + Math.cos(0.5 * x_rotation) * camera_dist * Math.cos(-y_rotation);
+	// camera.position.y = main_boid.position.y + camera_dist * Math.sin(0.5 * x_rotation);
+
+	var y_matrix = (new THREE.Matrix4()).makeRotationY(-y_rotation);
+	var x_matrix = (new THREE.Matrix4()).makeRotationX(x_rotation/2);
+	var q = (new THREE.Quaternion()).setFromUnitVectors( new THREE.Vector3(0, 0, 1), dir_vect);
+	var velocity_camera_matrix = (new THREE.Matrix4()).makeRotationFromQuaternion(q);
+
+    dir_vect.set(0, 0, -camera_dist);
+	dir_vect.applyMatrix4(x_matrix.multiply(y_matrix));
+	dir_vect.applyMatrix4(velocity_camera_matrix);
+
+	camera.position.x = main_boid.position.x + dir_vect.x;
+	camera.position.y = main_boid.position.y + dir_vect.y;
+	camera.position.z = main_boid.position.z + dir_vect.z;
+
 	controls.target.copy(main_boid.position);
 	controls.update();
-
 	renderer.render(scene, camera);
 };
 animate();
-

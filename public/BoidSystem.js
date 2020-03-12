@@ -1,120 +1,100 @@
-//not working, well never tested...
 class Enviroment {
-    constructor(free_movement_radius=100){
-        this.max_velocity = 5;
+    constructor(free_movement_radius=200){
+        this.max_velocity = 0.5;
         this.free_movement_radius = free_movement_radius; //radius where icentric force(not limited by max_force) starts
-        this.full_radius = free_movement_radius + 2 * this.max_velocity; //coordinate center should be (0 0 0)
+        this.outer_radius = free_movement_radius * 0.2; //coordinate center should be (0 0 0)
         this.population = [];
-        this.max_force = 0.5;
-        this.noise_const = 1/10
-        this.boid_count = 0;
+        this.max_force = 0.03;
+        this.noise_const = 1/10;
     }
     
     add_boid(boid){
-        this.population.append(boid);
-        this.boid_count++;
+        this.population.push(boid);
     }
 }
 
 
-class Boid{
-    constructor(object, name, id){//TODO create a function to find eledgeble position 
-        // this.position = new TREE.Vector3(x, y, z);
-        this.position = rand_vect().multiplyScalar(10)
-        this.velocity = new TREE.Vector3();
-        this.acceleration = new TREE.Vector3();
-        this.perception = 20
-        this.object = object;
-        this.object.position = this.position
-		this.name = name;
-        this.id = id;
-        this.cluster = null;
-    }
+function Boid(geom, name, id) {
+    this.position = rand_vect(200); //need to changes
+    this.velocity = rand_vect(0.2);
+    this.acceleration = new THREE.Vector3();
+    this.perception = 20;
+    this.geom = geom;
+    this.geom.position.set(this.position.x, this.position.y, this.position.z);
+    this.name = name;
+    this.id = id;
+    this.cluster = null;
+}
 
-    live(population){
-        // var noise = new Vector3(rand_vect()).multiplyScalar(noise_const);
-        this.acceleration = rand_vect().multiplyScalar(noise_const);//add noise
-        this.apply_alignment(population);
-        this.apply_separation(population);
-        this.apply_cohesion(population);
-        this.apply_attraction_to_center();Scalar
-        this.acceleration = normalize_vect(this.acceleration, Enviroment.max_force);
-        this.apply_attraction_to_center(); //modifies acceleration, repels from borders
-        this.velocity.add(this.acceleration);
-        this.normalize_vect(this.velocity, Enviroment.max_velocity)
-        this.position.add(this.velocity);
-        this.acceleration = new THREE.Vector3();
-    }
+Boid.prototype.live = function(env) {
+    // this.acceleration = rand_vect(env.noise_const * env.max_force * Math.pow(3, (-1/3)));//add noise; 
+    this.apply_alignment(env);
+    this.apply_separation(env);
+    this.apply_cohesion(env);
+    this.acceleration = normalize_vect(this.acceleration, env.max_force);
+    this.apply_attraction_to_center(env); //modifies acceleration, repels from border
+    // this.acceleration = normalize_vect(this.acceleration, env.max_force);
+    this.velocity.add(this.acceleration);
+    this.velocity = normalize_vect(this.velocity, env.max_velocity)
+    this.position.add(this.velocity);
+    this.geom.position.set(this.position.x, this.position.y, this.position.z);
+    this.acceleration.set(0, 0, 0);
+}
 
-    apply_alignment(population){
-        var all_vectors = new THREE.Vector3();
-        var count = 0;
-        for(boid in population){
-            if (this.position.distanceTo(boid.position) <= this.perception){
-                all_vectors.add(this.velocity.length());
-                count++;    
-            }
+Boid.prototype.apply_alignment = function(env){
+    var all_vectors = new THREE.Vector3();
+    var count = 0;
+    for(var i = 0; i < env.population.length; i++){
+        if (this.position.distanceTo(env.population[i].position) <= this.perception && env.population[i].id != this.id){
+            all_vectors.add(env.population[i].velocity);
+            count++;  
         }
-        var steer_vel = all_vectors.divide(count);
-        this.normalize_vect(steer_vel, Enviroment.max_velocity);
+    }
+    if (count != 0){
+        var steer_vel = all_vectors.divideScalar(count);
+        normalize_vect(steer_vel, env.max_velocity);
         this.acceleration.add(steer_vel.sub(this.velocity));
     }
+}
 
-    apply_separation(population){
-        var all_vectors = new THREE.Vector3();
-        var count = 0;
-        for(boid in population){
-            var distance = this.position.distanceTo(boid.position);
-            if (distance < this.perception && distance != 0){
-                all_vectors.add(this.position.sub(boid.position).divide(distance));
-                count++;    
-            }
-        }
-        if (count != 0){
-            var steer_vel = all_vectors.divide(count);
-            this.normalize_vect(steer_vel, Enviroment.max_velocity);
-            this.acceleration.add(steer_vel.sub(this.velocity));
-        }
+Boid.prototype.apply_separation = function(env){
+    var all_vectors = new THREE.Vector3();
+    var count = 0;
+    for(var i = 0; i < env.population.length; i++){
+        var distance = this.position.distanceTo(env.population[i].position);
+        if (distance < this.perception && boid_env.population[i].id != this.id){
+            all_vectors.add(env.population[i].position);
+            count++;    
+        } 
     }
-
-    apply_cohesion(population){
-        var all_vectors = new THREE.Vector3();
-        var count = 0;
-        for(boid in population){
-            var distance = this.position.distanceTo(boid.position);
-            if (distance < this.perception){
-                all_vectors.add(boid.position);
-                count++;    
-            }
-        }
-        var steer_vel = all_vectors.divide(count);
-        this.normalize_vect(steer_vel, Enviroment.max_velocity);
-        this.acceleration.add(steer_vel.sub(this.velocity));
-    }
-
-    apply_attraction_to_center(){
-        var dist_to_center = this.position.length();
-        if (dist_to_center > Enviroment.free_movement_radius){
-            var diff = dist_to_center - Enviroment.free_movement_radius;
-            this.acceleration.add(TREE.Vector3.copy(this.position).multiplyScalar(diff / (2 * Enviroment.max_velocity * dist_to_center)));
-        }
+    if (count != 0){
+        var from_center = this.position.clone().sub(all_vectors.divideScalar(count));
+        var proportion = 1 - (from_center.length() / this.perception);
+        this.acceleration.add(normalize_vect(from_center, env.max_force * proportion ** 2));
     }
 }
 
-function normalize_vect(vect, max_length){
-    if (vect.length() > Enviroment.max_velocity){
-        vect = vect.multiplyScalar(vect.length() / Enviroment.max_velocity);
+Boid.prototype.apply_cohesion = function(env){
+    var all_vectors = new THREE.Vector3();
+    var count = 0;
+    for(var i = 0; i < env.population.length; i++){
+        var distance = this.position.distanceTo(env.population[i].position);
+        if (distance < this.perception && boid_env.population[i].id != this.id){
+            all_vectors.add(env.population[i].position);
+            count++;    
+        }
     }
-    return vect;
+    if (count > 0){
+        var to_center = all_vectors.divideScalar(count).sub(this.position);
+        this.acceleration.add(normalize_vect(to_center, env.max_force * 0.25));
+    }
 }
 
-//makes random array
-function rand_vect(){
-    norm_constant = Enviroment.max_velocity / Math.pow(1, 1/3);
-    var vect = new THREE.Vector3();
-    for (let i = 0; i < 3; i++){
-        vect[i] = Math.random() * norm_constant;
+Boid.prototype.apply_attraction_to_center = function(env){
+    var dist_to_center = this.position.length();
+    if (dist_to_center > env.free_movement_radius){
+        var diff = env.free_movement_radius - dist_to_center;
+        var d = normalize_vect(this.position.clone(), env.max_force * (diff / env.outer_radius))
+        this.acceleration.add(d);
     }
-    return vect;
 }
-
