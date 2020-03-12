@@ -1,4 +1,4 @@
-const socket = io.connect('http://localhost:3000');
+const socket = io.connect('http://localhost:3000/');
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -39,10 +39,26 @@ main_boid = boid_env.population[0];
 main_boid.geom.rotation.reorder("YXZ");
 //>>>>>>>>>>>>>should be on the server
 
+scene.background = new THREE.CubeTextureLoader().setPath('images/panorama/').load(['px.png', 'nx.png',
+	'py.png', 'ny.png', 'pz.png', 'nz.png']);
+
+// const boid_geometry = new THREE.SphereGeometry(0.1);
+// const boid_material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+// const main_boid = new THREE.Mesh(boid_geometry, boid_material);
+// scene.add(main_boid);
+
+window.addEventListener( 'resize', onWindowResize, false );
+
+function onWindowResize() {
+	camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+
+    renderer.setSize( window.innerWidth, window.innerHeight );
+}
 
 add_figures();
 
-function add_figures(){
+function add_figures() {
 	const geometry = new THREE.BoxGeometry(1, 1, 1);
 	const material = new THREE.MeshBasicMaterial({ color: 0xffffff });
 	const cube = new THREE.Mesh(geometry, material);

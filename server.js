@@ -1,4 +1,3 @@
-const opn = require('opn');
 const express = require('express');
 const socket = require('socket.io');
 
@@ -21,5 +20,3 @@ io.sockets.on('connection', (socket) => {
 		//io.sockets.emit('mouse', mouse);
 	});
 });
-
-opn('http://' + hostname + ':' + port + '/');
