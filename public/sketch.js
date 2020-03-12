@@ -30,7 +30,6 @@ template_boid_geometry.faces.push(
 //<<<<<<<<<<<<<should be on the server
 var boid_env = new Enviroment();
 for(var i = 0; i < 100; i++){
-	// let b_geom = template_boid.clone();
 	boid = new Boid(template_boid.clone(), "Boid Nr." + i, i);
 	scene.add(boid.geom);
 	boid_env.add_boid(boid);
@@ -41,11 +40,6 @@ main_boid.geom.rotation.reorder("YXZ");
 
 scene.background = new THREE.CubeTextureLoader().setPath('images/panorama/').load(['px.png', 'nx.png',
 	'py.png', 'ny.png', 'pz.png', 'nz.png']);
-
-// const boid_geometry = new THREE.SphereGeometry(0.1);
-// const boid_material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
-// const main_boid = new THREE.Mesh(boid_geometry, boid_material);
-// scene.add(main_boid);
 
 window.addEventListener( 'resize', onWindowResize, false );
 
@@ -113,11 +107,9 @@ const animate = () => {
 
 	// boid_env.population[0].position.set(5, 5, 5);
 	boid_env.population[0].live(boid_env);
-	// console.log(main_boid.velocity);
 	var dir_vect = boid_env.population[0].velocity.clone().normalize();
 	var body_x_matrix = (new THREE.Matrix4()).makeRotationFromQuaternion((new THREE.Quaternion()).setFromUnitVectors(new THREE.Vector3(0, 0, -1), (new THREE.Vector3(0, dir_vect.y, -1)).normalize()));
 	var body_y_matrix = (new THREE.Matrix4()).makeRotationFromQuaternion((new THREE.Quaternion()).setFromUnitVectors(new THREE.Vector3(0, 0, -1), (new THREE.Vector3(dir_vect.x, 0, dir_vect.z)).normalize()));
-	// boid_env.population[0].geom.rotation.setFromQuaternion(two_vectors_to_quaternion(new THREE.Vector3(0, 0, -1), dir_vect)); //old version
 	boid_env.population[0].geom.rotation.setFromRotationMatrix(body_y_matrix.multiply(body_x_matrix));
 
 	camera_dist = 10;
