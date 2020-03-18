@@ -1,8 +1,12 @@
 const express = require('express');
 const socket = require('socket.io');
 
-const hostname = 'localhost';
-const port = 3000;
+var os = require( 'os' );
+var networkInterfaces = os.networkInterfaces( );
+
+
+const hostname = os.networkInterfaces( );
+const port = 8080;
 
 const app = express();
 const server = app.listen(port, hostname);
