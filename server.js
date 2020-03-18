@@ -1,11 +1,9 @@
 const express = require('express');
 const socket = require('socket.io');
 
-var os = require( 'os' );
-var networkInterfaces = os.networkInterfaces( );
+const os = require('os');
 
-
-const hostname = os.networkInterfaces( );
+const hostname = os.networkInterfaces();
 const port = 8080;
 
 const app = express();
