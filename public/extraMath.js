@@ -16,20 +16,42 @@ function normalize_vect(vect, max_length){
     return vect;
 }
 
+function distance(a, b){
+    sum = 0;
+    for (let i = 0; i < 3; i++){
+        sum += (a[i] - b[i]) ** 2;
+    }
+    return Math.sqrt(sum);
+}
 
-//axis nust be normalized
-function axis_angle_to_quaternion(axis, angle) {
-    let s = Math.sin(angle/2);
-    x = axis.x * s;
-    y = axis.y * s;
-    z = axis.z * s;
-    w = Math.cos(angle/2);
-    return new THREE.Quaternion(x, y, z, w);
-  }
+function divide_scalar(vect, scalar){
+    for (let i = 0; i < 3; i++){
+        vect[i] /= scalar;
+    }
+    return vect;
+}
 
-  
-function two_vectors_to_quaternion(from, to){
-    var axis = from.clone().cross(to).normalize();
-    var angle = Math.acos(from.clone().dot(to)/(from.length() * to.length()));
-	return axis_angle_to_quaternion(axis, angle);
+function multiply_scalar(vect, scalar){
+    for (let i = 0; i < 3; i++){
+        vect[i] *= scalar;
+    }
+    return vect;
+}
+
+function add_to(a, b){
+    for (let i = 0; i < 3; i++){
+        a[i] += b[i];
+    }
+    return a;
+}
+
+function sub_from(a, b){
+    for (let i = 0; i < 3; i++){
+        a[i] -= b[i];
+    }
+    return a;
+}
+
+function to_vector3(arr){
+    return new THREE.Vector3(arr[0], arr[1], arr[2]);
 }
