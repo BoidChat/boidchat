@@ -9,6 +9,7 @@ const controls = new THREE.OrbitControls(camera, renderer.domElement);
 
 scene.background = new THREE.CubeTextureLoader().setPath('images/panorama/').load(['px.png', 'nx.png',
 	'py.png', 'ny.png', 'pz.png', 'nz.png']);
+scene.background.minFilter = THREE.LinearFilter;
 
 const boid_geometry = new THREE.SphereGeometry(0.1);
 const boid_material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
