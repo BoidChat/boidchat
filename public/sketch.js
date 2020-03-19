@@ -1,3 +1,7 @@
+var i = 0;
+const planes = [];
+var plane;
+
 const socket = io.connect();
 
 const scene = new THREE.Scene();
@@ -24,24 +28,6 @@ mtlLoader.setPath('models/');
 
 const light = new THREE.AmbientLight(0x404040, 7); // soft white light
 scene.add(light);
-
-const planes = [];
-
-mtlLoader.load('Plane.mtl', (materials) => {
-	materials.preload();
-
-	objLoader.setMaterials(materials);
-	objLoader.load('Plane.obj', (object) => {
-		const material = object.children[0].material;
-		for (let i = 0; i != 10; ++i) {
-			planes[i] = object.clone();
-			planes[i].children[0].material = material.clone();
-			planes[i].position.x = i * 3 + 2;
-			scene.add(planes[i]);
-		}
-		planes[2].children[0].material.color.setHex(0xff0000);
-	});
-});
 
 window.addEventListener('resize', onWindowResize, false);
 
@@ -74,6 +60,31 @@ const material4 = new THREE.MeshBasicMaterial({ color: 0x0000ff });
 const cube4 = new THREE.Mesh(geometry4, material4);
 cube4.position.z = 1;
 scene.add(cube4);
+
+
+socket.on('loadEveryone', (count) => {
+	mtlLoader.load('Plane.mtl', (materials) => {
+		materials.preload();
+	
+		objLoader.setMaterials(materials);
+		objLoader.load('Plane.obj', (object) => {
+			plane = object.clone();
+				for(var e = 0; e < count; e++){
+		planes[i++] = plane.clone();
+		planes[i-1].children[0].material = plane.children[0].material;;
+		planes[i-1].position.x = i*2;
+		scene.add(planes[i-1]);
+		}
+		});
+	});
+})
+
+socket.on('NewConnection', function(){
+	planes[i++] = plane.clone();
+	planes[i-1].children[0].material = plane.children[0].material;;
+	planes[i-1].position.x = i*2;
+	scene.add(planes[i-1]);
+})
 
 let mouse = {
 	x: screen.width / 2,
