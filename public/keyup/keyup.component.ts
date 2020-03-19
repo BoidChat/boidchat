@@ -1,5 +1,4 @@
-
-
+import Component from "../../node_modules/@angular/core"
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/distinctUntilChanged';
@@ -18,4 +17,4 @@ export class KeyUpComponent {
     }
     this.values[0] = value; }
   }
-  
+ng
