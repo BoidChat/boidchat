@@ -4,7 +4,7 @@ const socket = require('socket.io');
 const os = require('os');
 
 const hostname = os.networkInterfaces();
-const port = 8080;
+const port = 80;
 
 const app = express();
 const server = app.listen(port, hostname);

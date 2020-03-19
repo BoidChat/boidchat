@@ -15,6 +15,30 @@ const boid_material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
 const main_boid = new THREE.Mesh(boid_geometry, boid_material);
 scene.add(main_boid);
 
+var objLoader = new THREE.OBJLoader();
+objLoader.setPath('models/');
+
+var mtlLoader = new THREE.MTLLoader();
+mtlLoader.setPath('models/');
+var plane = new THREE.Object3D();
+
+var light = new THREE.AmbientLight( 0x404040 , 7); // soft white light
+scene.add( light );
+new Promise((resolve) => {
+	mtlLoader.load('Plane.mtl', (materials) => {
+	  resolve(materials);
+	});
+  })
+  .then((materials) => {
+	materials.preload();
+	objLoader.setMaterials(materials);
+	objLoader.load('Plane.obj', (object) =>{
+	  plane = object;
+	  plane.position.x = 2
+	  scene.add(plane);
+	});
+  });
+
 window.addEventListener('resize', onWindowResize, false);
 
 function onWindowResize() {
