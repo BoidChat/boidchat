@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import io from 'socket.io';
 const socket=io.connect();
+var messages :string[];
 
 @Component({
     selector: 'app-key-up',
@@ -8,7 +9,7 @@ const socket=io.connect();
   })
 export class KeyUpComponent {
   
-  messages :string[];
+  
   onEnter(value: string) {
     if(value.length>256){
       //exception message?
@@ -20,12 +21,14 @@ export class KeyUpComponent {
       //}
       //this.values[0] = value;
       
-      socket.on('message',function(data){
-        for(var i=this.messages.length;i>0;i--){
-          this.messages[i]=this.values[i-1];
-        }
-        this.messages[0] = data;
-      });
+      
     }
   }
+  
 }
+socket.on('message',function(data){
+  for(var i=this.messages.length;i>0;i--){
+    this.messages[i]=this.messages[i-1];
+  }
+  this.messages[0] = data;
+});
