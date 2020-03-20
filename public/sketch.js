@@ -1,3 +1,7 @@
+var i = 0;
+const planes = [];
+var plane;
+
 const socket = io.connect();
 
 const scene = new THREE.Scene();
@@ -9,11 +13,21 @@ const controls = new THREE.OrbitControls(camera, renderer.domElement);
 
 scene.background = new THREE.CubeTextureLoader().setPath('images/panorama/').load(['px.png', 'nx.png',
 	'py.png', 'ny.png', 'pz.png', 'nz.png']);
+scene.background.minFilter = THREE.LinearFilter;
 
 const boid_geometry = new THREE.SphereGeometry(0.1);
 const boid_material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
 const main_boid = new THREE.Mesh(boid_geometry, boid_material);
 scene.add(main_boid);
+
+const objLoader = new THREE.OBJLoader();
+objLoader.setPath('models/');
+
+const mtlLoader = new THREE.MTLLoader();
+mtlLoader.setPath('models/');
+
+const light = new THREE.AmbientLight(0x404040, 7); // soft white light
+scene.add(light);
 
 window.addEventListener('resize', onWindowResize, false);
 
@@ -24,32 +38,53 @@ function onWindowResize() {
 	renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
-add_figures();
+const geometry = new THREE.BoxGeometry(1, 1, 1);
+const material = new THREE.MeshBasicMaterial({ color: 0xffffff });
+const cube = new THREE.Mesh(geometry, material);
+scene.add(cube);
 
-function add_figures() {
-	const geometry = new THREE.BoxGeometry(1, 1, 1);
-	const material = new THREE.MeshBasicMaterial({ color: 0xffffff });
-	const cube = new THREE.Mesh(geometry, material);
-	scene.add(cube);
+const geometry2 = new THREE.BoxGeometry(0.5, 0.5, 0.5);
+const material2 = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+const cube2 = new THREE.Mesh(geometry2, material2);
+cube2.position.x = 1;
+scene.add(cube2);
 
-	const geometry2 = new THREE.BoxGeometry(0.5, 0.5, 0.5);
-	const material2 = new THREE.MeshBasicMaterial({ color: 0xff0000 });
-	const cube2 = new THREE.Mesh(geometry2, material2);
-	cube2.position.x = 1;
-	scene.add(cube2);
+const geometry3 = new THREE.BoxGeometry(0.5, 0.5, 0.5);
+const material3 = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+const cube3 = new THREE.Mesh(geometry3, material3);
+cube3.position.y = 1;
+scene.add(cube3);
 
-	const geometry3 = new THREE.BoxGeometry(0.5, 0.5, 0.5);
-	const material3 = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-	const cube3 = new THREE.Mesh(geometry3, material3);
-	cube3.position.y = 1;
-	scene.add(cube3);
+const geometry4 = new THREE.BoxGeometry(0.5, 0.5, 0.5);
+const material4 = new THREE.MeshBasicMaterial({ color: 0x0000ff });
+const cube4 = new THREE.Mesh(geometry4, material4);
+cube4.position.z = 1;
+scene.add(cube4);
 
-	const geometry4 = new THREE.BoxGeometry(0.5, 0.5, 0.5);
-	const material4 = new THREE.MeshBasicMaterial({ color: 0x0000ff });
-	const cube4 = new THREE.Mesh(geometry4, material4);
-	cube4.position.z = 1;
-	scene.add(cube4);
-}
+
+socket.on('loadEveryone', (count) => {
+	mtlLoader.load('Plane.mtl', (materials) => {
+		materials.preload();
+	
+		objLoader.setMaterials(materials);
+		objLoader.load('Plane.obj', (object) => {
+			plane = object.clone();
+				for(var e = 0; e < count; e++){
+		planes[i++] = plane.clone();
+		planes[i-1].children[0].material = plane.children[0].material;;
+		planes[i-1].position.x = i*2;
+		scene.add(planes[i-1]);
+		}
+		});
+	});
+})
+
+socket.on('NewConnection', function(){
+	planes[i++] = plane.clone();
+	planes[i-1].children[0].material = plane.children[0].material;;
+	planes[i-1].position.x = i*2;
+	scene.add(planes[i-1]);
+})
 
 let mouse = {
 	x: screen.width / 2,
