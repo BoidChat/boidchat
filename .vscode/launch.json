@@ -5,8 +5,6 @@
 	// Visados yra paleidžiama tik viena konfiguracija.
 	"version": "0.2.0",
 	"configurations": [
-		
-		
 		{
 			"name": "Server",
 			"type": "node",
@@ -27,7 +25,6 @@
 			"preLaunchTask": "DelayClientLaunch",
 			"internalConsoleOptions": "openOnFirstSessionStart"
 		}
-		
 	],
 	"compounds": [
 		{
