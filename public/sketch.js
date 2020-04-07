@@ -1,9 +1,9 @@
-var plane_count = 0;
+let plane_count = 0;
 const planes = [];
-var plane;
-var ready = false
-var main_boid = undefined;
-var boid_base = undefined;
+let plane;
+let ready = false
+let main_boid = undefined;
+let boid_base = undefined;
 
 const socket = io.connect();
 
@@ -36,7 +36,7 @@ scene.background = new THREE.CubeTextureLoader().setPath('images/panorama/').loa
 'py.png', 'ny.png', 'pz.png', 'nz.png']);
 scene.background.minFilter = THREE.LinearFilter;
 
-var loadingManager = new THREE.LoadingManager();
+let loadingManager = new THREE.LoadingManager();
 loadingManager.onStart = function() {
 	ready = false;
 }
@@ -107,7 +107,7 @@ socket.on('init', (data) => {
 		objLoader.setMaterials(materials);
 		objLoader.load('Plane.obj', (object) => {
 			plane = object.clone();
-			for(var e = 0; e < data.count; e++){
+			for(let e = 0; e < data.count; e++){
 				pl = plane.clone();
 				pl.children[0].material = plane.children[0].material;
 				scene.add(pl);
@@ -145,7 +145,7 @@ socket.emit('register' /**insert user name here as parameter*/);
 function animate(){
 	if (data.length != planes.length){
 		while (data.length > planes.length){
-			var pl = plane.clone();
+			let pl = plane.clone();
 			pl.children[0].material = plane.children[0].material;;
 			scene.add(pl);
 			planes.push(pl);
@@ -162,35 +162,38 @@ function animate(){
 	
 	//<<<<<<<<<<others
 	let plane_index = 1
+	let = undefined;
 	for(var i = 0; i < data.length; i++){
 		
 		if (main_boid.id != data[i].id){
 			let other_boid = data[i];
-			let dir_vect = to_vector3(other_boid.velocity).normalize();
+			dir_vect = to_vector3(other_boid.velocity).normalize();
 			planes[plane_index].position.set(other_boid.position[0], other_boid.position[1], other_boid.position[2]);
-			planes[plane_index].rotation.setFromQuaternion((new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 0, -1), dir_vect)));
+			let body_x_matrix = (new THREE.Matrix4()).makeRotationFromQuaternion((new THREE.Quaternion()).setFromUnitVectors(new THREE.Vector3(0, 0, -1), (new THREE.Vector3(0, dir_vect.y, -1)).normalize()));
+			let body_y_matrix = (new THREE.Matrix4()).makeRotationFromQuaternion((new THREE.Quaternion()).setFromUnitVectors(new THREE.Vector3(0, 0, -1), (new THREE.Vector3(dir_vect.x, 0, dir_vect.z)).normalize()));
+			planes[plane_index].rotation.setFromRotationMatrix(body_y_matrix.multiply(body_x_matrix));
 			plane_index++;
 		}
 	}
 	//>>>>>>>>>>others
 	
-	var dir_vect = main_boid.velocity.clone().normalize();
-	var body_x_matrix = (new THREE.Matrix4()).makeRotationFromQuaternion((new THREE.Quaternion()).setFromUnitVectors(new THREE.Vector3(0, 0, -1), (new THREE.Vector3(0, dir_vect.y, -1)).normalize()));
-	var body_y_matrix = (new THREE.Matrix4()).makeRotationFromQuaternion((new THREE.Quaternion()).setFromUnitVectors(new THREE.Vector3(0, 0, -1), (new THREE.Vector3(dir_vect.x, 0, dir_vect.z)).normalize()));
+	dir_vect = main_boid.velocity.clone().normalize();
+	let body_x_matrix = (new THREE.Matrix4()).makeRotationFromQuaternion((new THREE.Quaternion()).setFromUnitVectors(new THREE.Vector3(0, 0, -1), (new THREE.Vector3(0, dir_vect.y, -1)).normalize()));
+	let body_y_matrix = (new THREE.Matrix4()).makeRotationFromQuaternion((new THREE.Quaternion()).setFromUnitVectors(new THREE.Vector3(0, 0, -1), (new THREE.Vector3(dir_vect.x, 0, dir_vect.z)).normalize()));
 	main_boid.geom.rotation.setFromRotationMatrix(body_y_matrix.multiply(body_x_matrix));
 	
 	camera_dist = 10;
-	var x_rotation = ((mouse.y / window.innerHeight) - 0.5) * Math.PI * 2;
-	var y_rotation = ((mouse.x / window.innerWidth) - 0.5) * Math.PI * 2;
+	let x_rotation = ((mouse.y / window.innerHeight) - 0.5) * Math.PI * 2;
+	let y_rotation = ((mouse.x / window.innerWidth) - 0.5) * Math.PI * 2;
 	//old version
 	// camera.position.x = main_boid.position.x + Math.cos(0.5 * x_rotation) * camera_dist * Math.sin(-y_rotation);
 	// camera.position.z = main_boid.position.z + Math.cos(0.5 * x_rotation) * camera_dist * Math.cos(-y_rotation);
 	// camera.position.y = main_boid.position.y + camera_dist * Math.sin(0.5 * x_rotation);
 	
-	var y_matrix = (new THREE.Matrix4()).makeRotationY(-y_rotation);
-	var x_matrix = (new THREE.Matrix4()).makeRotationX(x_rotation/2);
-	var q = (new THREE.Quaternion()).setFromUnitVectors( new THREE.Vector3(0, 0, 1), dir_vect);
-	var velocity_camera_matrix = (new THREE.Matrix4()).makeRotationFromQuaternion(q);
+	let y_matrix = (new THREE.Matrix4()).makeRotationY(-y_rotation);
+	let x_matrix = (new THREE.Matrix4()).makeRotationX(x_rotation/2);
+	let q = (new THREE.Quaternion()).setFromUnitVectors( new THREE.Vector3(0, 0, 1), dir_vect);
+	let velocity_camera_matrix = (new THREE.Matrix4()).makeRotationFromQuaternion(q);
 	
     dir_vect.set(0, 0, -camera_dist);
 	dir_vect.applyMatrix4(x_matrix.multiply(y_matrix));

@@ -19,12 +19,8 @@ server.listen(port, hostname);
 
 app.use(express.static('public'));
 
-// <<<<<<< HEAD
-
 var connections = 0;
 
-
-// =======
 class Cluster extends Array{
 
 	constructor (name){
