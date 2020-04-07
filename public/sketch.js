@@ -40,11 +40,11 @@ let loadingManager = new THREE.LoadingManager();
 loadingManager.onStart = function() {
 	ready = false;
 };
-loadingManager.onLoad = function() {
-	main_boid = new Boid(planes[0], boid_base);
+loadingManager.onLoad = function() { //triggers when plane model is loaded
+	main_boid = new Boid(planes[0], boid_base); //makes current client plane/boid
 	scene.add(main_boid.geom);
 	socket.emit('update_info', main_boid.get_base());
-	main_boid.geom.rotation.reorder("YXZ");
+	main_boid.geom.rotation.reorder("YXZ");//requered orientation
 	ready = true;
 };
 
@@ -100,14 +100,14 @@ onmousemove = (e) => {
 	mouse.y = e.clientY;
 };
 
-socket.on('init', (data) => {
+socket.on('init', (data) => { //server acknoledging new boid initialisation send by 'register'
 	boid_base = data.base;
 	mtlLoader.load('Plane.mtl', (materials) => {
 		materials.preload();
 		objLoader.setMaterials(materials);
 		objLoader.load('Plane.obj', (object) => {
 			plane = object.clone();
-			for (let e = 0; e < data.count; e++) {
+			for (let e = 0; e < data.count; e++) { //preliminary adds other users boids 
 				pl = plane.clone();
 				pl.children[0].material = plane.children[0].material;
 				scene.add(pl);
@@ -121,18 +121,18 @@ socket.on('init', (data) => {
 let data = undefined;
 socket.on('live', (d) => {
 	if (ready) {
-		data = d;
+		data = d; //TODO need to put as argument to 'animate' instead of global varieble
 
 		// socket.emit('send_message', main_boid.name); //demonstration, need to put this somewhere else
 		requestAnimationFrame(animate);
 	}
 });
 
-socket.on('receive_message', (data) => {
+socket.on('receive_message', (data) => { //does what it says
 	console.log(data);
 });
 
-socket.emit('register' /**insert user name here as parameter*/);
+socket.emit('register' /**insert user name here as parameter*/); //sends request to server to create new boid, initialisation
 
 // socket.on('NewConnection', function(){
 // 	var pl = plane.clone();
@@ -143,7 +143,7 @@ socket.emit('register' /**insert user name here as parameter*/);
 // })
 
 function animate() {
-	if (data.length != planes.length) {
+	if (data.length != planes.length) { //adjusts planes to comply with data
 		while (data.length > planes.length) {
 			let pl = plane.clone();
 			pl.children[0].material = plane.children[0].material;;
@@ -162,9 +162,8 @@ function animate() {
 
 	//<<<<<<<<<<others
 	let plane_index = 1;
-	let = undefined;
+	let dir_vect = undefined;
 	for (var i = 0; i < data.length; i++) {
-
 		if (main_boid.id != data[i].id) {
 			let other_boid = data[i];
 			dir_vect = to_vector3(other_boid.velocity).normalize();
@@ -176,12 +175,13 @@ function animate() {
 		}
 	}
 	//>>>>>>>>>>others
-
+	//main boid rotations
 	dir_vect = main_boid.velocity.clone().normalize();
 	let body_x_matrix = (new THREE.Matrix4()).makeRotationFromQuaternion((new THREE.Quaternion()).setFromUnitVectors(new THREE.Vector3(0, 0, -1), (new THREE.Vector3(0, dir_vect.y, -1)).normalize()));
 	let body_y_matrix = (new THREE.Matrix4()).makeRotationFromQuaternion((new THREE.Quaternion()).setFromUnitVectors(new THREE.Vector3(0, 0, -1), (new THREE.Vector3(dir_vect.x, 0, dir_vect.z)).normalize()));
 	main_boid.geom.rotation.setFromRotationMatrix(body_y_matrix.multiply(body_x_matrix));
 
+	//camera movement around boid
 	camera_dist = 10;
 	let x_rotation = ((mouse.y / window.innerHeight) - 0.5) * Math.PI * 2;
 	let y_rotation = ((mouse.x / window.innerWidth) - 0.5) * Math.PI * 2;

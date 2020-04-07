@@ -1,17 +1,10 @@
 const express = require('express');
 const http = require('http');
 const socket = require('socket.io');
-// <<<<<<< HEAD
-
 const os = require('os');
-
 const hostname = os.networkInterfaces();
 const port = 80;
 
-// =======
-// const hostname = 'localhost';
-// const port = 3000;
-// >>>>>>> BoidSystem
 const app = express();
 const server = http.createServer(app);
 const io = socket(server);
@@ -22,7 +15,6 @@ app.use(express.static('public'));
 var connections = 0;
 
 class Cluster extends Array {
-
 	constructor(name) {
 		super();
 		this.name = name;
@@ -54,6 +46,7 @@ function remove_user(id) {
 	main.delete(id);
 }
 
+//makes random name for new cluster
 function get_rand_name() {
 	let name = "cluster-" + Math.floor(Math.random() * 1e12).toString();
 	while (true) {
@@ -79,7 +72,7 @@ function add_new_user(socket, name) {
 		if (values[i] == name) { return { error: 'Name taken!' }; }
 	}
 	let cluster = new Cluster(get_rand_name());
-	socket.join(cluster.name);
+	socket.join(cluster.name); //user joins cluster/room
 	let user = new User(name.trim().toLowerCase(), socket, cluster.name);
 	main.set(socket.id, user);
 	cluster.push(socket.id);
@@ -97,19 +90,19 @@ function toArray(cluster_name = "") {
 
 //adjusts all clusters by users neighbours
 function clusterize() {
-	clusters = [];
+	clusters = []; //emptying clusters array
 	let users_ids = Array.from(main.keys());
 	users_ids.sort(function(a, b) { return main.get(b).neighbors.length - main.get(a).neighbors.length; }); //decending by neighbor count
 	for (let i = 0; i < users_ids.length; i++) {
-		main.get(users_ids[i]).viewed = false;
+		main.get(users_ids[i]).viewed = false; //reseting .viewed values to false
 	}
 	for (let i = 0; i < users_ids.length; i++) {
 		let user = main.get(users_ids[i]);
-		if (!user.viewed) {
+		if (!user.viewed) {//triggers once per cluster
 			let cluster = new Cluster("unset");
-			cluster.push(user.id);
-			DFS_users(user, cluster);
-			clusters.push(cluster);
+			cluster.push(user.id); //DFS_users have to know cluster starting point
+			DFS_users(user, cluster); //constructing custer
+			clusters.push(cluster); //refilling clusters array
 		}
 	}
 	clusters.sort(function(a, b) { return b.length - a.length; }); //decending by cluster size
@@ -117,17 +110,20 @@ function clusterize() {
 	update_users_clusters();
 }
 
+//it is modified DFS algorithm to find all conected users (which can be put in same cluster)
+//insiders - already connected users
 function DFS_users(element, insiders) {
 	element.viewed = true;
 	for (let i = 0; i < element.neighbors.length; i++) {
 		let n = main.get(element.neighbors[i]);
-		if (n && !insiders.includes(n.id) && !n.viewed && n.neighbors.includes(element.id)) {
-			insiders.push(n.id);
-			DFS_users(n, insiders);
+		if (n && !insiders.includes(n.id) && !n.viewed && n.neighbors.includes(element.id)) { //usually succeds once in method excecution
+			insiders.push(n.id); //adding user to cluster
+			DFS_users(n, insiders); //diving recursivly ddeper to newly added user
 		}
 	}
 }
 
+//updates individual users cluster_id by from cluster which they belong to, manages rooms
 function update_users_clusters() {
 	for (let i = 0; i < clusters.length; i++) {
 		let cl_name = clusters[i].name;
@@ -142,6 +138,7 @@ function update_users_clusters() {
 	}
 }
 
+//sets cluster name/id by highiest share of members with the same cluster_id
 function add_names() {
 	let name_arr = new Array(clusters.length);
 	for (let i = 0; i < clusters.length; i++) {
@@ -183,8 +180,8 @@ function add_names() {
 	}
 }
 
-let clusters = new Array();
-let main = new Map();
+let clusters = new Array();//sorted by user count, clusters array
+let main = new Map();//map that stores loged on users {user_id : user}
 
 // io.sockets.on('connection', (socket) => {
 // 	console.log('New connection ' + socket.id + " count: "+connections);
@@ -202,18 +199,18 @@ io.sockets.on('connection', (socket) => {
 		socket.emit('init', { base: user, count: connections });
 	});
 
-	socket.on('send_message', (data) => {
+	socket.on('send_message', (data) => { //receives message and brodcasts it to all same cluster members
 		room = main.get(socket.id).cluster_id;
 		socket.to(room).emit('receive_message', data);
 	});
 
-	socket.on('update_info', (data) => {
+	socket.on('update_info', (data) => { //updates user information on the server side
 		update_user(data);
 	});
 
-	socket.on('disconnect', () => {
+	socket.on('disconnect', () => { //excecuted when user disconnects
 		connections--;
-		socket.broadcast.emit('RemovedConnection');
+		// socket.broadcast.emit('RemovedConnection'); //(not in use yet)brodcasts to all users that one user disconnected
 		remove_user(socket.id);
 		console.log('Removed connection ' + socket.id);
 	});
