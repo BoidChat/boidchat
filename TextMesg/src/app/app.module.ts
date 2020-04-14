@@ -9,6 +9,7 @@ import { KeyupComponent } from './keyup/keyup.component';
   declarations: [
     AppComponent,
     KeyupComponent
+    
   ],
   imports: [
     BrowserModule,
