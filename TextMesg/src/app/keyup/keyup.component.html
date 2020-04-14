@@ -1,6 +1,15 @@
+div.textBox {
+  border: 1px solid black;
+  opacity: 0.6;
+}
+
 <input #box (keyup.enter)="onEnter(box.value)">
-<div *ngFor="let value of values">
-  <h3>
-    {{value}}
-  </h3>
-</div> 
+
+<div class="textBox">
+  <div *ngFor="let value of values">
+
+    <h3>
+      {{value}}
+    </h3>
+  </div> 
+</div>
