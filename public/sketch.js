@@ -107,7 +107,7 @@ socket.on('init', (data) => { //server acknoledging new boid initialisation send
 		objLoader.setMaterials(materials);
 		objLoader.load('Plane.obj', (object) => {
 			plane = object.clone();
-			for (let e = 0; e < data.count; e++) { //preliminary adds other users boids 
+			for (let e = 0; e < data.count; e++) { //preliminary adds other users boids
 				pl = plane.clone();
 				pl.children[0].material = plane.children[0].material;
 				scene.add(pl);
