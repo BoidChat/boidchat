@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import io from 'socket.io';
 const socket=io.connect();
-var messages :string[];
+
+let messages: Array<String>;
 @Component({
   selector: 'app-keyup',
   templateUrl: './keyup.component.html',
@@ -20,10 +21,10 @@ export class KeyupComponent implements OnInit {
     }
     else{
       io.emit('message',value);
-      //for(var i=value.length;i>0;i--){
-      //  this.values[i]=this.values[i-1];
-      //}
-      //this.values[0] = value;
+      for(var i=value.length;i>0;i--){
+        messages[i]=messages[i-1];
+      }
+      messages[0] = value;
       
       
     }
