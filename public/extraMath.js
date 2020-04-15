@@ -8,12 +8,34 @@ function rand_vect(multiplier) {
 	return vect;
 }
 
+function streach_vect(vect, new_length) {
+	return vect.multiplyScalar(new_length / vect.length());
+}
 
 function normalize_vect(vect, max_length) {
 	if (vect.length() > max_length) {
 		vect = vect.multiplyScalar(max_length / vect.length());
 	}
 	return vect;
+}
+
+function normalize_vect2(vect, max_length, min_length) {
+	let length = vect.length();
+	if (length > max_length) {
+		vect = vect.multiplyScalar(max_length / length);
+	}
+	else if (length < min_length) {
+		vect = vect.multiplyScalar(min_length / length);
+	}
+	return vect;
+}
+
+function arr_length(arr){
+	sum = 0;
+	for (let i = 0; i < arr.length; i++) {
+		sum += arr[i] ** 2;
+	}
+	return Math.sqrt(sum);
 }
 
 function distance(a, b) {

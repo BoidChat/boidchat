@@ -14,27 +14,10 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 const controls = new THREE.OrbitControls(camera, renderer.domElement);
 
-//<<<<<<<<<<<<<<template boid
-// const template_boid_geometry = new THREE.Geometry();
-// template_boid_geometry.vertices.push(
-//   new THREE.Vector3(0, 0, -0.4),     // 0
-//   new THREE.Vector3( 0.4,-0.2, 1),   // 1
-//   new THREE.Vector3(-0.4, -0.2, 1),  // 2
-//   new THREE.Vector3( 0, 0.6, 0.9)    // 3
-// );
-// template_boid_geometry.faces.push(
-// 	new THREE.Face3(0, 1, 2), //bottom
-// 	new THREE.Face3(0, 3, 1), //right
-// 	new THREE.Face3(0, 2, 3), //left
-// 	new THREE.Face3(1, 3, 2), //back
-//   );
-//   const template_boid_material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
-//   template_boid = new THREE.Mesh(template_boid_geometry, template_boid_material);
-// //>>>>>>>>>>>>>>template boid
 
-scene.background = new THREE.CubeTextureLoader().setPath('images/panorama/').load(['px.png', 'nx.png',
-	'py.png', 'ny.png', 'pz.png', 'nz.png']);
-scene.background.minFilter = THREE.LinearFilter;
+// scene.background = new THREE.CubeTextureLoader().setPath('images/panorama/').load(['px.png', 'nx.png',
+// 	'py.png', 'ny.png', 'pz.png', 'nz.png']);
+// scene.background.minFilter = THREE.LinearFilter;
 
 let loadingManager = new THREE.LoadingManager();
 loadingManager.onStart = function() {
@@ -159,7 +142,7 @@ function animate() {
 	}
 	let my_data = main_boid.live(data);
 	socket.emit('update_info', my_data);
-
+	// console.log(distance([0, 0, 0], my_data.velocity));
 	//<<<<<<<<<<others
 	let plane_index = 1;
 	let dir_vect = undefined;
