@@ -35,9 +35,11 @@ function User(name, socket, cluster_id) {
 function update_user(data) {
 	if (data) {
 		let user = main.get(data.id);
-		user.position = data.position;
-		user.velocity = data.velocity;
-		user.neighbors = data.neighbors;
+		if (user) {
+			user.position = data.position;
+			user.velocity = data.velocity;
+			user.neighbors = data.neighbors;
+		}
 	}
 }
 
