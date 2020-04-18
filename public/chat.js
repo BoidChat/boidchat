@@ -1,4 +1,4 @@
-function process(evt) {
+function sendMessage(evt) {
 	if (evt.keyCode === 13) {
 		console.log(evt);
 		var node = document.createElement("p");
