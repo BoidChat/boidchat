@@ -1,5 +1,40 @@
-div.textBox {
-    border: 1px solid black;
-    opacity: 0.6;
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  border: rgba(33, 36, 34, 0.1) solid 10px;
+  border-radius: 10px;
+  background: #f1f1f1; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  border: rgba(33, 36, 34, 0.1) solid 10px;
+  border-radius: 10px;
+  background: #888; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  border: rgba(33, 36, 34, 0.1) solid 10px;
+  border-radius: 10px;
+  background: #555; 
+}
+
+div.chatBox {
+  position: absolute;
+  background: rgba(131, 131, 131, 0.1);
+  overflow: auto;
+  width: 30%;
+  height: 40%;
+  border: rgba(33, 36, 34, 0.1) solid 1px;
+  border-radius: 3%;
   }
   
+div.chatBox h3{
+  word-wrap: break-word;
+  color:rgba(31, 32, 31, 0.8);
+} 

@@ -32,12 +32,17 @@ export class KeyupComponent implements OnInit {
 
     if(value.length>256){
       //exception message?
+      for(var i=this.messages.length;i>0;i--){
+        this.messages[i]=this.messages[i-1];
+      }
+
+      this.messages[0] = "MESSAGE TOOOOOOOOOO LONG MAN WTF";
     }
     else{
 
       //this.socket.io.emit('message',value);
 
-      for(var i=value.length;i>0;i--){
+      for(var i=this.messages.length;i>0;i--){
         this.messages[i]=this.messages[i-1];
       }
 
