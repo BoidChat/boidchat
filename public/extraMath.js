@@ -30,7 +30,7 @@ function normalize_vect2(vect, max_length, min_length) {
 	return vect;
 }
 
-function arr_length(arr){
+function arr_length(arr) {
 	sum = 0;
 	for (let i = 0; i < arr.length; i++) {
 		sum += arr[i] ** 2;

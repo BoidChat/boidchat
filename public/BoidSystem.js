@@ -64,7 +64,7 @@ Boid.prototype.regress_to_averedge = function() {
 	let l = this.velocity.length();
 	let diff = (avg - this.velocity.length()) / avg;
 	this.acceleration.add(streach_vect(this.velocity.clone(), max_force * diff));
-}
+};
 
 Boid.prototype.update_neighbors = function(data) {
 	this.neighbors = new Array();
@@ -99,8 +99,8 @@ Boid.prototype.apply_separation = function(data) {
 	let position = this.position.toArray();
 	for (let i = 0; i < data.length; i++) {
 		if (distance(position, data[i].position) < this.perception && data[i].id != this.id) {
-			vect_from_me = to_vector3(data[i].position).sub(this.position)
-			let multiplier = (vect_from_me.length() / this.perception) ** 2
+			vect_from_me = to_vector3(data[i].position).sub(this.position);
+			let multiplier = (vect_from_me.length() / this.perception) ** 2;
 			all_vectors.add(vect_from_me.multiplyScalar(multiplier));
 			count++;
 		}
@@ -128,13 +128,13 @@ Boid.prototype.apply_cohesion = function(data) {
 };
 
 Boid.prototype.apply_attraction_to_center = function(count) {
-	let free_movement_coafitient = Math.pow(base_free_movement_radius, 3) / (5 * Math.pow(this.perception, 3))
+	let free_movement_coafitient = Math.pow(base_free_movement_radius, 3) / (5 * Math.pow(this.perception, 3));
 	let free_movement_radius;
-	if (count <= 5){
+	if (count <= 5) {
 		free_movement_radius = base_free_movement_radius;
 	}
-	else{
-		free_movement_radius = Math.pow((free_movement_coafitient * count * Math.pow(this.perception, 3)), 1/3);
+	else {
+		free_movement_radius = Math.pow((free_movement_coafitient * count * Math.pow(this.perception, 3)), 1 / 3);
 	}
 	let dist_to_center = this.position.length();
 	let outer_radius = free_movement_radius * 0.2; //coordinate center should be (0 0 0)
