@@ -1,9 +1,5 @@
 import { Component } from '@angular/core';
 
-declare function Boid(): any;
-
-
-
 
 @Component({
   selector: 'app-root',
