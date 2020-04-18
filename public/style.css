@@ -11,28 +11,28 @@ canvas {
 /* width */
 ::-webkit-scrollbar {
 	width: 10px;
-  }
-  
-  /* Track */
-  ::-webkit-scrollbar-track {
+}
+
+/* Track */
+::-webkit-scrollbar-track {
 	border: rgba(33, 36, 34, 0.1) solid 10px;
 	border-radius: 10px;
-	background: #f1f1f1; 
-  }
-   
-  /* Handle */
-  ::-webkit-scrollbar-thumb {
+	background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
 	border: rgba(33, 36, 34, 0.1) solid 10px;
 	border-radius: 10px;
-	background: #888; 
-  }
-  
-  /* Handle on hover */
-  ::-webkit-scrollbar-thumb:hover {
+	background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
 	border: rgba(33, 36, 34, 0.1) solid 10px;
 	border-radius: 10px;
-	background: #555; 
-  }
+	background: #555;
+}
 
 #chatBox {
 	background: rgba(24, 24, 24, 0.2);
@@ -58,10 +58,10 @@ canvas {
 	color: white;
 	padding: 10px;
 	margin: 0px;
-	width: 100%;
+	width: 30%;
 	height: 2%;
 
-	z-index: 2;
+	z-index: 3;
 	position: absolute;
 	left: 0px;
 	bottom: 0px;
