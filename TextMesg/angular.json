@@ -124,6 +124,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "TextMesg"
+    }
+  },
+  "defaultProject": "TextMesg",
+  "cli": {
+    "analytics": false
+  }
 }
