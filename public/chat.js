@@ -10,7 +10,6 @@ socket.on('receive_message', (data, name) => {
 	var sender = document.createTextNode(name);
 	sender.appendData(": ")
 	sender.appendData(data)
-	sender.appendData(data)
 	node.appendChild(sender);
 	document.getElementById("chatBox").appendChild(node);
 });
