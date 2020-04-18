@@ -49,31 +49,6 @@ function onWindowResize() {
 	renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
-function add_figures() {
-	const geometry = new THREE.BoxGeometry(1, 1, 1);
-	const material = new THREE.MeshBasicMaterial({ color: 0xffffff });
-	const cube = new THREE.Mesh(geometry, material);
-	scene.add(cube);
-
-	const geometry2 = new THREE.BoxGeometry(0.5, 0.5, 0.5);
-	const material2 = new THREE.MeshBasicMaterial({ color: 0xff0000 });
-	const cube2 = new THREE.Mesh(geometry2, material2);
-	cube2.position.x = 1;
-	scene.add(cube2);
-
-	const geometry3 = new THREE.BoxGeometry(0.5, 0.5, 0.5);
-	const material3 = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-	const cube3 = new THREE.Mesh(geometry3, material3);
-	cube3.position.y = 1;
-	scene.add(cube3);
-
-	const geometry4 = new THREE.BoxGeometry(0.5, 0.5, 0.5);
-	const material4 = new THREE.MeshBasicMaterial({ color: 0x0000ff });
-	const cube4 = new THREE.Mesh(geometry4, material4);
-	cube4.position.z = 1;
-	scene.add(cube4);
-}
-
 let mouse = {
 	x: screen.width / 2,
 	y: screen.height / 2
