@@ -5,7 +5,7 @@ let ready = false;
 let main_boid = undefined;
 let boid_base = undefined;
 
-const socket = io.connect();
+const socket2 = io.connect();
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -43,7 +43,7 @@ loadingManager.onStart = function() {
 loadingManager.onLoad = function() { //triggers when plane model is loaded
 	main_boid = new Boid(planes[0], boid_base); //makes current client plane/boid
 	scene.add(main_boid.geom);
-	socket.emit('update_info', main_boid.get_base());
+	socket2.emit('update_info', main_boid.get_base());
 	main_boid.geom.rotation.reorder("YXZ");//requered orientation
 	ready = true;
 };
@@ -100,7 +100,7 @@ onmousemove = (e) => {
 	mouse.y = e.clientY;
 };
 
-socket.on('init', (data) => { //server acknowledging new boid initialisation send by 'register'
+socket2.on('init', (data) => { //server acknowledging new boid initialisation send by 'register'
 	boid_base = data.base;
 	mtlLoader.load('Plane.mtl', (materials) => {
 		materials.preload();
@@ -119,22 +119,22 @@ socket.on('init', (data) => { //server acknowledging new boid initialisation sen
 });
 
 let data = undefined;
-socket.on('live', (d) => {
+socket2.on('live', (d) => {
 	if (ready) {
 		data = d; //TODO need to put as argument to 'animate' instead of global variable
 
-		// socket.emit('send_message', main_boid.name); //demonstration, need to put this somewhere else
+		// socket2.emit('send_message', main_boid.name); //demonstration, need to put this somewhere else
 		requestAnimationFrame(animate);
 	}
 });
 
-socket.on('receive_message', (data) => { //does what it says
+socket2.on('receive_message', (data) => { //does what it says
 	console.log(data);
 });
 
-socket.emit('register' /**insert user name here as parameter*/); //sends request to server to create new boid, initialisation
+socket2.emit('register' /**insert user name here as parameter*/); //sends request to server to create new boid, initialisation
 
-// socket.on('NewConnection', function(){
+// socket2.on('NewConnection', function(){
 // 	var pl = plane.clone();
 // 	pl.children[0].material = plane.children[0].material;;
 // 	scene.add(pl);
@@ -158,7 +158,7 @@ function animate() {
 		}
 	}
 	let my_data = main_boid.live(data);
-	socket.emit('update_info', my_data);
+	socket2.emit('update_info', my_data);
 
 	//<<<<<<<<<<others
 	let plane_index = 1;

@@ -1,3 +1,5 @@
+
+
 const max_velocity = 0.5;
 const free_movement_radius = 35; //radius where icentric force(not limited by max_force) starts
 // const free_movement_radius = 20; //radius where icentric force(not limited by max_force) starts

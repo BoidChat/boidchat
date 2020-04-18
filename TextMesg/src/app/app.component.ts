@@ -1,5 +1,10 @@
 import { Component } from '@angular/core';
 
+declare function Boid(): any;
+
+
+
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -7,4 +12,7 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'textMessaging';
+  ngOnInit(): void {
+    
+  }
 }

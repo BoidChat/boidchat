@@ -27,10 +27,10 @@
               "src/styles.css"
             ],
             "scripts": [
-              "./src/assets/js/BoidSystem.js",
-              "./src/assets/js/extraMath.js",
-              "./src/assets/js/server.js",
-              "./src/assets/js/sketch.js"
+              "./src/app/BoidSystem.js",
+              "./src/app/extraMath.js",
+              "./src/app/server.js",
+              "./src/app/sketch.js"
             ]
           },
           "configurations": {
