@@ -26,7 +26,12 @@
             "styles": [
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [
+              "./src/assets/js/BoidSystem.js",
+              "./src/assets/js/extraMath.js",
+              "./src/assets/js/server.js",
+              "./src/assets/js/sketch.js"
+            ]
           },
           "configurations": {
             "production": {
