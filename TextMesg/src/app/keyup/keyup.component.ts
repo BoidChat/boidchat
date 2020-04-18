@@ -17,7 +17,7 @@ export class KeyupComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    // this.socket=io.connect();
+    //this.socket=io.connect();
     // this.socket.on('message',function(data){
 
     // for(var i=this.messages.length;i>0;i--){

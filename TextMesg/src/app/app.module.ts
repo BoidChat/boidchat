@@ -20,9 +20,9 @@ import { Sketch } from '../assets/js/sketch.js';
     AppRoutingModule
   ],
   providers: [
-    BoidSystem, //not sure how to import without problems
-    ExtraMath,
-    Sketch
+    // BoidSystem, //not sure how to import without problems
+    // ExtraMath,
+    // Sketch
   ],
   bootstrap: [AppComponent]
 })
