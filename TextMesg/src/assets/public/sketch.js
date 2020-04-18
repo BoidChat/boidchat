@@ -100,7 +100,7 @@ onmousemove = (e) => {
 	mouse.y = e.clientY;
 };
 
-socket.on('init', (data) => { //server acknoledging new boid initialisation send by 'register'
+socket.on('init', (data) => { //server acknowledging new boid initialisation send by 'register'
 	boid_base = data.base;
 	mtlLoader.load('Plane.mtl', (materials) => {
 		materials.preload();
@@ -121,7 +121,7 @@ socket.on('init', (data) => { //server acknoledging new boid initialisation send
 let data = undefined;
 socket.on('live', (d) => {
 	if (ready) {
-		data = d; //TODO need to put as argument to 'animate' instead of global varieble
+		data = d; //TODO need to put as argument to 'animate' instead of global variable
 
 		// socket.emit('send_message', main_boid.name); //demonstration, need to put this somewhere else
 		requestAnimationFrame(animate);
