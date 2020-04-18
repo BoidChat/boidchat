@@ -8,16 +8,58 @@ canvas {
 	display: block;
 }
 
-#div1 {
-	background: rgba(131, 131, 131, 0.1);
-	border: 1px solid gray;
+/* width */
+::-webkit-scrollbar {
+	width: 10px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+	border: rgba(33, 36, 34, 0.1) solid 10px;
+	border-radius: 10px;
+	background: #f1f1f1; 
+  }
+   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+	border: rgba(33, 36, 34, 0.1) solid 10px;
+	border-radius: 10px;
+	background: #888; 
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+	border: rgba(33, 36, 34, 0.1) solid 10px;
+	border-radius: 10px;
+	background: #555; 
+  }
+
+#chatBox {
+	background: rgba(24, 24, 24, 0.2);
+	border: 1px solid rgba(94, 94, 94, 0.2);
 
 	overflow: auto;
 
 	padding: 10px;
 	margin: 0px;
-	width: 20%;
-	height: 50%;
+	width: 30%;
+	height: 40%;
+
+	z-index: 2;
+	position: absolute;
+	left: 0px;
+	bottom: 5%;
+}
+
+#TextBox {
+	background: rgba(24, 24, 24, 0.2);
+	border: 1px solid rgba(94, 94, 94, 0.2);
+	overflow: auto;
+	color: white;
+	padding: 10px;
+	margin: 0px;
+	width: 100%;
+	height: 2%;
 
 	z-index: 2;
 	position: absolute;
