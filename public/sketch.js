@@ -86,10 +86,6 @@ socket.on('live', (d) => {
 	}
 });
 
-socket.on('receive_message', (data) => { //does what it says
-	console.log(data);
-});
-
 socket.emit('register' /**insert user name here as parameter*/); //sends request to server to create new boid, initialisation
 
 // socket.on('NewConnection', function(){

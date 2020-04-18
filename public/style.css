@@ -43,7 +43,7 @@ canvas {
 	padding: 10px;
 	margin: 0px;
 	width: 30%;
-	height: 40%;
+	height: 50%;
 
 	z-index: 2;
 	position: absolute;
@@ -71,4 +71,21 @@ canvas {
 #chat{
 	word-wrap: break-word;
 	color: white;
+}
+
+#flockers{
+	background: rgba(24, 24, 24, 0.2);
+	border: 1px solid rgba(94, 94, 94, 0.2);
+
+	overflow: auto;
+
+	padding: 10px;
+	margin: 0px;
+	width: 30%;
+	height: 20%;
+
+	z-index: 2;
+	position: absolute;
+	left: 0px;
+	top: 0%;
 }
