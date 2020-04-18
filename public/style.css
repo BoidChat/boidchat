@@ -49,6 +49,7 @@ canvas {
 	position: absolute;
 	left: 0px;
 	bottom: 5%;
+
 }
 
 #TextBox {
@@ -65,4 +66,9 @@ canvas {
 	position: absolute;
 	left: 0px;
 	bottom: 0px;
+}
+
+#chat{
+	word-wrap: break-word;
+	color: white;
 }
