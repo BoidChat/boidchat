@@ -1,6 +1,6 @@
 const max_velocity = 0.5;
 const min_velocity = 0.2;
-const base_free_movement_radius = 50; //radius where icentric force(not limited by max_force) starts
+const base_free_movement_radius = 30; //radius where icentric force(not limited by max_force) starts
 // const base_free_movement_radius = 20; //radius where icentric force(not limited by max_force) starts
 // const free_movement_radius = 20; //radius where icentric force(not limited by max_force) starts
 const max_force = 0.03;
@@ -12,8 +12,8 @@ function Boid(geom, base) {
 	// this.position = rand_vect(20); //need changes
 	this.velocity = rand_vect(0.5);
 	this.acceleration = new THREE.Vector3();
-	// this.perception = 10;
-	this.perception = 8;
+	this.perception = 10;
+	// this.perception = 8;
 	this.geom = geom;
 	this.geom.position.set(this.position.x, this.position.y, this.position.z);
 	this.name = base.name;
@@ -49,6 +49,7 @@ Boid.prototype.live = function(data) {
 	this.position.add(this.velocity);
 	this.geom.position.set(this.position.x, this.position.y, this.position.z);
 	this.acceleration.set(0, 0, 0);
+	// console.log(window.performance.now);
 	return {
 		id: this.id,
 		name: this.name,

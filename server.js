@@ -82,12 +82,12 @@ function add_new_user(socket, name) {
 }
 
 function toArray(cluster_name = "") {
-	if (cluster_name != "") {
-		return Array.from(clusters.get(cluster_name).values());
-	}
-	else {
+	// if (cluster_name != "") { 
+	// 	return Array.from(clusters.get(cluster_name).values()); //
+	// }
+	// else {
 		return Array.from(main.values());
-	}
+	// }
 }
 
 //adjusts all clusters by users neighbours
@@ -196,14 +196,14 @@ io.sockets.on('connection', (socket) => {
 		// io.to(socket.id).emit('loadEveryone', connections);
 		// socket.broadcast.emit('NewConnection');
 		console.log('New connection ' + socket.id);
-		let meaningfull_name = Math.floor(Math.random() * 1000).toString();
+		let meaningfull_name = Math.floor(Math.random() * 100000).toString();
 		let user = add_new_user(socket, meaningfull_name); //TODO give meaningfull name instead of number
 		socket.emit('init', { base: user, count: connections });
 	});
 
 	socket.on('send_message', (data) => { //receives message and brodcasts it to all same cluster members
 		room = main.get(socket.id).cluster_id;
-		socket.to(room).emit('receive_message', data, main.get(socket.id).name);
+		io.in(room).emit('receive_message', data, main.get(socket.id).name);
 	});
 
 	socket.on('update_info', (data) => { //updates user information on the server side
@@ -225,4 +225,12 @@ setInterval(() => {
 
 setInterval(() => {
 	clusterize();
+	for (let j = 0; j < clusters.length; j++){
+		let cid = clusters[j].name;
+		let flockers = [];
+		for(let i = 0; i < clusters[j].length; i++){
+			flockers.push(main.get(clusters[j][i]).name)
+		}
+		io.in(cid).emit('cluster_info', flockers.sort());
+	}
 }, 1000);

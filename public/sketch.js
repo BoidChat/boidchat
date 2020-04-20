@@ -15,9 +15,9 @@ document.body.appendChild(renderer.domElement);
 const controls = new THREE.OrbitControls(camera, renderer.domElement);
 
 
- scene.background = new THREE.CubeTextureLoader().setPath('images/panorama/').load(['px.png', 'nx.png',
- 	'py.png', 'ny.png', 'pz.png', 'nz.png']);
- scene.background.minFilter = THREE.LinearFilter;
+//  scene.background = new THREE.CubeTextureLoader().setPath('images/panorama/').load(['px.png', 'nx.png',
+//  	'py.png', 'ny.png', 'pz.png', 'nz.png']);
+//  scene.background.minFilter = THREE.LinearFilter;
 
 let loadingManager = new THREE.LoadingManager();
 loadingManager.onStart = function() {
