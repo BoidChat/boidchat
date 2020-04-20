@@ -203,7 +203,7 @@ io.sockets.on('connection', (socket) => {
 
 	socket.on('send_message', (data) => { //receives message and brodcasts it to all same cluster members
 		room = main.get(socket.id).cluster_id;
-		socket.to(room).emit('receive_message', data, main.get(socket.id).name);
+		io.in(room).emit('receive_message', data, main.get(socket.id).name);
 	});
 
 	socket.on('update_info', (data) => { //updates user information on the server side
