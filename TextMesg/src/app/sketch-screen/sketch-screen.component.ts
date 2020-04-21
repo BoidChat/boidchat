@@ -27,7 +27,7 @@ export class SketchScreenComponent implements OnInit {
   private renderer ;
   
   private controls ;
-
+  private mouse;
   constructor(@Inject(DOCUMENT) private document: Document) {
     
 
@@ -46,115 +46,85 @@ export class SketchScreenComponent implements OnInit {
 
     this.scene.background = new THREE.CubeTextureLoader().setPath('images/panorama/').load(['px.png', 'nx.png',	'py.png', 'ny.png', 'pz.png', 'nz.png']);
     this.scene.background.minFilter = THREE.LinearFilter;
+    let mouse = {
+      x: screen.width / 2,
+      y: screen.height / 2
+    };
 
-  let loadingManager = new THREE.LoadingManager();
-  loadingManager.onStart = function() {
-    this.ready = false;
-  };
-  loadingManager.onLoad = function() { //triggers when plane model is loaded
-    this.main_boid = new Boid(this.planes[0], this.boid_base); //makes current client plane/boid
-    this.scene.add(this.main_boid.geom);
-    this.socket2.emit('update_info', this.main_boid.get_base());
-    this.main_boid.geom.rotation.reorder("YXZ");//requered orientation
-    this.ready = true;
-  };
+    let loadingManager = new THREE.LoadingManager();
+    loadingManager.onStart = function() {
+      this.ready = false;
+    };
+    loadingManager.onLoad = function() { //triggers when plane model is loaded
+      this.main_boid = new Boid(this.planes[0], this.boid_base); //makes current client plane/boid
+      this.scene.add(this.main_boid.geom);
+      this.socket2.emit('update_info', this.main_boid.get_base());
+      this.main_boid.geom.rotation.reorder("YXZ");//requered orientation
+      this.ready = true;
+    };
 
-  const objLoader = new THREE.OBJLoader(loadingManager);
-  objLoader.setPath('models/');
+    const objLoader = new THREE.OBJLoader(loadingManager);
+    objLoader.setPath('models/');
 
-  const mtlLoader = new THREE.MTLLoader(loadingManager);
-  mtlLoader.setPath('models/');
+    const mtlLoader = new THREE.MTLLoader(loadingManager);
+    mtlLoader.setPath('models/');
 
-  const light = new THREE.AmbientLight(0x404040, 7); // soft white light
-  this.scene.add(light);
+    const light = new THREE.AmbientLight(0x404040, 7); // soft white light
+    this.scene.add(light);
 
-  window.addEventListener('resize', onWindowResize, false);
+    window.addEventListener('resize', this.onWindowResize, false);
 
-  function onWindowResize() {
-    this.camera.aspect = window.innerWidth / window.innerHeight;
-    this.camera.updateProjectionMatrix();
-
-    this.renderer.setSize(window.innerWidth, window.innerHeight);
-  }
-
-  // // testing method
-  // function add_figures() {
-  // 	const geometry = new THREE.BoxGeometry(1, 1, 1);
-  // 	const material = new THREE.MeshBasicMaterial({ color: 0xffffff });
-  // 	const cube = new THREE.Mesh(geometry, material);
-  // 	scene.add(cube);
-
-  // 	const geometry2 = new THREE.BoxGeometry(0.5, 0.5, 0.5);
-  // 	const material2 = new THREE.MeshBasicMaterial({ color: 0xff0000 });
-  // 	const cube2 = new THREE.Mesh(geometry2, material2);
-  // 	cube2.position.x = 1;
-  // 	scene.add(cube2);
-
-  // 	const geometry3 = new THREE.BoxGeometry(0.5, 0.5, 0.5);
-  // 	const material3 = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-  // 	const cube3 = new THREE.Mesh(geometry3, material3);
-  // 	cube3.position.y = 1;
-  // 	scene.add(cube3);
-
-  // 	const geometry4 = new THREE.BoxGeometry(0.5, 0.5, 0.5);
-  // 	const material4 = new THREE.MeshBasicMaterial({ color: 0x0000ff });
-  // 	const cube4 = new THREE.Mesh(geometry4, material4);
-  // 	cube4.position.z = 1;
-  // 	scene.add(cube4);
-  // }
-
-  let mouse = {
-    x: screen.width / 2,
-    y: screen.height / 2
-  };
-  onmousemove = (e) => {
-    mouse.x = e.clientX;
-    mouse.y = e.clientY;
-  };
-
-  this.socket2.on('init', (data) => { //server acknowledging new boid initialisation send by 'register'
-    this.boid_base = data.base;
-    mtlLoader.load('Plane.mtl', (materials) => {
-      materials.preload();
-      objLoader.setMaterials(materials);
-      objLoader.load('Plane.obj', (object) => {
-        this.plane = object.clone();
-        for (let e = 0; e < data.count; e++) { //preliminary adds other users boids
-          var pl = this.plane.clone();
-          pl.children[0].material = this.plane.children[0].material;
-          this.scene.add(pl);
-          this.planes.push(pl);
-          this.plane_count++;
-        }
+  
+    
+    mouse;
+    this.socket2.on('init', (data) => { //server acknowledging new boid initialisation send by 'register'
+      this.boid_base = data.base;
+      mtlLoader.load('Plane.mtl', (materials) => {
+        materials.preload();
+        objLoader.setMaterials(materials);
+        objLoader.load('Plane.obj', (object) => {
+          this.plane = object.clone();
+          for (let e = 0; e < data.count; e++) { //preliminary adds other users boids
+            var pl = this.plane.clone();
+            pl.children[0].material = this.plane.children[0].material;
+            this.scene.add(pl);
+            this.planes.push(pl);
+            this.plane_count++;
+          }
+        });
       });
     });
-  });
 
-  this.socket2.on('live', (d) => {
-    if (this.ready) {		 //TODO need to put as argument to 'animate' instead of global variable
+    this.socket2.on('live', (d) => {
+      if (this.ready) {		 //TODO need to put as argument to 'animate' instead of global variable
 
-      // socket2.emit('send_message', main_boid.name); //demonstration, need to put this somewhere else
-      requestAnimationFrame(this.animate(d));
-    }
-  });
+        // socket2.emit('send_message', main_boid.name); //demonstration, need to put this somewhere else
+        requestAnimationFrame(this.animate(d));
+      }
+    });
 
-  this.socket2.on('receive_message', (data) => { //does what it says
-    console.log(data);
-  });
+    this.socket2.on('receive_message', (data) => { //does what it says
+      console.log(data);
+    });
 
-  this.socket2.emit('register' /**insert user name here as parameter*/); //sends request to server to create new boid, initialisation
+    this.socket2.emit('register' /**insert user name here as parameter*/); //sends request to server to create new boid, initialisation
 
-  // socket2.on('NewConnection', function(){
-  // 	var pl = plane.clone();
-  // 	pl.children[0].material = plane.children[0].material;;
-  // 	scene.add(pl);
-  // 	planes.push(pl);
-  // 	plane_count++;
-  // })
+    // socket2.on('NewConnection', function(){
+    // 	var pl = plane.clone();
+    // 	pl.children[0].material = plane.children[0].material;;
+    // 	scene.add(pl);
+    // 	planes.push(pl);
+    // 	plane_count++;
+    // })
 
 
 
   }
+
+  onmousemove = (e) => {
+    this.mouse.x = e.clientX;
+    this.mouse.y = e.clientY;
+  };
 
   animate(data) {
     if (data.length != this.planes.length) { //adjusts planes to comply with data
@@ -197,8 +167,9 @@ export class SketchScreenComponent implements OnInit {
   
     //camera movement around boid
     var camera_dist = 10;
-    let x_rotation = ((mouse.y / window.innerHeight) - 0.5) * Math.PI * 2;
-    let y_rotation = ((mouse.x / window.innerWidth) - 0.5) * Math.PI * 2;
+    
+    let x_rotation = ((this.mouse.y / window.innerHeight) - 0.5) * Math.PI * 2;
+    let y_rotation = ((this.mouse.x / window.innerWidth) - 0.5) * Math.PI * 2;
     //old version
     // camera.position.x = main_boid.position.x + Math.cos(0.5 * x_rotation) * camera_dist * Math.sin(-y_rotation);
     // camera.position.z = main_boid.position.z + Math.cos(0.5 * x_rotation) * camera_dist * Math.cos(-y_rotation);
@@ -224,6 +195,12 @@ export class SketchScreenComponent implements OnInit {
 
     to_vector3(arr) {
       return new THREE.Vector3(arr[0], arr[1], arr[2]);
+    }
+    onWindowResize() {
+      this.camera.aspect = window.innerWidth / window.innerHeight;
+      this.camera.updateProjectionMatrix();
+
+      this.renderer.setSize(window.innerWidth, window.innerHeight);
     }
 }
 
