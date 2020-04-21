@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, HostListener } from '@angular/core';
 import { io } from 'socket.io';
 import { THREE } from 'three.js';
 import { DOCUMENT } from '@angular/common';
@@ -32,6 +32,11 @@ export class SketchScreenComponent implements OnInit {
     
 
    }
+  @HostListener('document:mousemove', ['$event'])
+  onMousemove(event) {
+      this.mouse.x = event.clientX;
+      this.mouse.y = event.clientY;
+  }
 
   ngOnInit(): void {
     this.socket2 = io.connect()
@@ -75,8 +80,7 @@ export class SketchScreenComponent implements OnInit {
     window.addEventListener('resize', this.onWindowResize, false);
 
   
-    
-    mouse;
+       
     this.socket2.on('init', (data) => { //server acknowledging new boid initialisation send by 'register'
       this.boid_base = data.base;
       mtlLoader.load('Plane.mtl', (materials) => {
@@ -99,7 +103,7 @@ export class SketchScreenComponent implements OnInit {
       if (this.ready) {		 //TODO need to put as argument to 'animate' instead of global variable
 
         // socket2.emit('send_message', main_boid.name); //demonstration, need to put this somewhere else
-        requestAnimationFrame(this.animate(d));
+        requestAnimationFrame(() => this.animate(d));
       }
     });
 
@@ -109,22 +113,9 @@ export class SketchScreenComponent implements OnInit {
 
     this.socket2.emit('register' /**insert user name here as parameter*/); //sends request to server to create new boid, initialisation
 
-    // socket2.on('NewConnection', function(){
-    // 	var pl = plane.clone();
-    // 	pl.children[0].material = plane.children[0].material;;
-    // 	scene.add(pl);
-    // 	planes.push(pl);
-    // 	plane_count++;
-    // })
-
-
-
   }
 
-  onmousemove = (e) => {
-    this.mouse.x = e.clientX;
-    this.mouse.y = e.clientY;
-  };
+  
 
   animate(data) {
     if (data.length != this.planes.length) { //adjusts planes to comply with data
