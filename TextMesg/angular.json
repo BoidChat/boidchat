@@ -26,11 +26,7 @@
             "styles": [
               "src/styles.css"
             ],
-            "scripts": [
-              "./src/app/BoidSystem.js",
-              "./src/app/extraMath.js",
-              "./src/app/server.js",
-              "./src/app/sketch.js"
+            "scripts": [             
             ]
           },
           "configurations": {
