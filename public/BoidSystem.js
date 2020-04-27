@@ -5,6 +5,7 @@ const base_free_movement_radius = 30; //radius where icentric force(not limited 
 // const free_movement_radius = 20; //radius where icentric force(not limited by max_force) starts
 const max_force = 0.03;
 const noise_const = 1 / 10;
+const max_angular_velocity = Math.PI/2000 //rad./ms
 
 
 function Boid(geom, base) {
@@ -20,6 +21,7 @@ function Boid(geom, base) {
 	this.id = base.id;
 	this.cluster_id = base.cluster_id;
 	this.neighbors = new Array();
+	this.last_live = Date.now();
 }
 
 Boid.prototype.get_base = function() {
@@ -42,14 +44,14 @@ Boid.prototype.live = function(data) {
 	this.apply_attraction_to_center(data.length); //modifies acceleration, repels from border
 	// this.acceleration = normalize_vect(this.acceleration, max_force);
 	this.regress_to_averedge();
-	this.velocity.add(this.acceleration);
+	// this.velocity.add(this.acceleration);
+	this.adjust_by_time();
 	// this.velocity = normalize_vect(this.velocity, max_velocity);
 	this.velocity = normalize_vect2(this.velocity, max_velocity, min_velocity);
 	this.update_neighbors(data);
 	this.position.add(this.velocity);
 	this.geom.position.set(this.position.x, this.position.y, this.position.z);
 	this.acceleration.set(0, 0, 0);
-	// console.log(window.performance.now);
 	return {
 		id: this.id,
 		name: this.name,
@@ -58,6 +60,25 @@ Boid.prototype.live = function(data) {
 		velocity: this.velocity.toArray(),
 		neighbors: this.neighbors
 	};
+};
+
+Boid.prototype.adjust_by_time = function() {
+	let new_time = Date.now();
+	let elapsed = new_time - this.last_live;
+	this.last_live = new_time;
+	let new_vel = this.velocity.clone().add(this.acceleration);
+	let current_angle = this.velocity.angleTo(new_vel);
+	console.log(1000 * current_angle / elapsed);
+	let target_angle = elapsed * max_angular_velocity;
+	if(current_angle > target_angle){
+		let vel_length = new_vel.length();
+		let rotation_axis = this.velocity.clone().cross(new_vel).normalize();
+		this.velocity.applyAxisAngle(rotation_axis, target_angle);
+		streach_vect(this.velocity, vel_length);
+	}
+	else{
+		this.velocity.add(this.acceleration);
+	}
 };
 
 Boid.prototype.regress_to_averedge = function() {
@@ -106,7 +127,8 @@ Boid.prototype.apply_separation = function(data) {
 	}
 	if (count > 0) {
 		let to_center = to_vector3(divide_scalar(all_vectors, count)).sub(this.position);
-		this.acceleration.add(streach_vect(to_center, -max_force));
+		// this.acceleration.add(streach_vect(to_center, -max_force));
+		this.acceleration.add(streach_vect(to_center, (this.perception - to_center.length()) * -max_force / this.perception));
 	}
 };
 
