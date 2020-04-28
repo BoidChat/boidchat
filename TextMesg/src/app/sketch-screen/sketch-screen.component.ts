@@ -1,8 +1,7 @@
 import { Component, OnInit, Inject, HostListener } from '@angular/core';
-import { io } from 'socket.io';
 import { THREE } from 'three.js';
 import { DOCUMENT } from '@angular/common';
-
+import {Socket, SocketIoConfig }from 'ngx-socket-io';
 
 @Component({
   selector: 'app-sketch-screen',
@@ -12,7 +11,7 @@ import { DOCUMENT } from '@angular/common';
 
 
 export class SketchScreenComponent implements OnInit {
-
+  config: SocketIoConfig = { url: 'http://localhost:8988', options: {} };
   private plane_count = 0;
   private planes = [];
   private plane;
@@ -20,7 +19,7 @@ export class SketchScreenComponent implements OnInit {
   private main_boid = undefined;
   private boid_base = undefined;
 
-  private socket2;
+  private socket2=new Socket(this.config);
 
   private scene ;
   private camera;
@@ -39,7 +38,7 @@ export class SketchScreenComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.socket2 = io.connect()
+    this.socket2 = this.socket2.connect()
 
     this.scene = new THREE.Scene()
     this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)

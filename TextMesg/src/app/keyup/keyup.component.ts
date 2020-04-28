@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
 
 //import io from 'socket.io';
-
+import { Socket, SocketIoConfig } from 'ngx-socket-io';
+import { Component, OnInit } from '@angular/core';
 
 
 
@@ -12,7 +12,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./keyup.component.css'],
 })
 export class KeyupComponent implements OnInit {
-  private socket=null;
+  config: SocketIoConfig = { url: 'http://localhost:8988', options: {} };
+  private socket=new Socket(this.config);
   public messages=[];
   constructor() { }
 
@@ -36,18 +37,28 @@ export class KeyupComponent implements OnInit {
         this.messages[i]=this.messages[i-1];
       }
 
-      this.messages[0] = "MESSAGE TOOOOOOOOOO LONG MAN WTF";
+      this.messages[0] = "Message too long";
     }
     else{
 
-      //this.socket.io.emit('message',value);
+      // //this.socket.io.emit('message',value);
+
+      // for(var i=this.messages.length;i>0;i--){
+      //   this.messages[i]=this.messages[i-1];
+      // }
+
+      // this.messages[0] = value;
+      
+
+     
+      this.socket.emit('message',function(data){
 
       for(var i=this.messages.length;i>0;i--){
         this.messages[i]=this.messages[i-1];
       }
-
-      this.messages[0] = value;
-    
+      
+      this.messages[0] = data;
+      });
     }
   }
 }
