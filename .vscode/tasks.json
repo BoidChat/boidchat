@@ -2,7 +2,7 @@
     "version": "2.0.0",
     "tasks": [
       {
-        "identifier": "ng serve",
+        "identifier": "ng serve --port 80",
         "type": "npm",
         "script": "start",
         "problemMatcher": [],
