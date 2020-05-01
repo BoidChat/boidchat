@@ -11,7 +11,7 @@ import {Socket, SocketIoConfig }from 'ngx-socket-io';
 
 
 export class SketchScreenComponent implements OnInit {
-  config: SocketIoConfig = { url: 'http://localhost:8988', options: {} };
+  config: SocketIoConfig = { url: 'http://localhost:80/', options: {} };
   private plane_count = 0;
   private planes = [];
   private plane;

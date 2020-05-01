@@ -12,7 +12,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./keyup.component.css'],
 })
 export class KeyupComponent implements OnInit {
-  config: SocketIoConfig = { url: 'http://localhost:8988', options: {} };
+  config: SocketIoConfig = { url: 'http://localhost:80/', options: {} };
   private socket=new Socket(this.config);
   public messages=[];
   constructor() { }
