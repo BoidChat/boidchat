@@ -9,7 +9,11 @@ function rand_vect(multiplier) {
 }
 
 function streach_vect(vect, new_length) {
-	return vect.multiplyScalar(new_length / vect.length());
+	let length =  vect.length();
+	if (length > 0){
+		return vect.multiplyScalar(new_length / vect.length());
+	}
+	return vect;
 }
 
 function normalize_vect(vect, max_length) {

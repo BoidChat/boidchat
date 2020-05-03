@@ -13,11 +13,12 @@ const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 const controls = new THREE.OrbitControls(camera, renderer.domElement);
+const camera_queue = new Vector_Queue(60);
 
 
-//  scene.background = new THREE.CubeTextureLoader().setPath('images/panorama/').load(['px.png', 'nx.png',
-//  	'py.png', 'ny.png', 'pz.png', 'nz.png']);
-//  scene.background.minFilter = THREE.LinearFilter;
+ scene.background = new THREE.CubeTextureLoader().setPath('images/panorama/').load(['px.png', 'nx.png',
+ 	'py.png', 'ny.png', 'pz.png', 'nz.png']);
+ scene.background.minFilter = THREE.LinearFilter;
 
 let loadingManager = new THREE.LoadingManager();
 loadingManager.onStart = function() {
@@ -57,7 +58,6 @@ onmousemove = (e) => {
 	mouse.x = e.clientX;
 	mouse.y = e.clientY;
 };
-
 socket.on('init', (data) => { //server acknoledging new boid initialisation send by 'register'
 	boid_base = data.base;
 	mtlLoader.load('Plane.mtl', (materials) => {
@@ -75,28 +75,21 @@ socket.on('init', (data) => { //server acknoledging new boid initialisation send
 		});
 	});
 });
-
 let data = undefined;
+let inter_data = undefined;
 socket.on('live', (d) => {
 	if (ready) {
 		data = d; //TODO need to put as argument to 'animate' instead of global varieble
-
-		// socket.emit('send_message', main_boid.name); //demonstration, need to put this somewhere else
+		inter_data = interpolate(data, main_boid.id);
 		requestAnimationFrame(animate);
 	}
 });
 
 socket.emit('register' /**insert user name here as parameter*/); //sends request to server to create new boid, initialisation
 
-// socket.on('NewConnection', function(){
-// 	var pl = plane.clone();
-// 	pl.children[0].material = plane.children[0].material;;
-// 	scene.add(pl);
-// 	planes.push(pl);
-// 	plane_count++;
-// })
 
 function animate() {
+
 	if (data.length != planes.length) { //adjusts planes to comply with data
 		while (data.length > planes.length) {
 			let pl = plane.clone();
@@ -111,17 +104,26 @@ function animate() {
 			plane_count--;
 		}
 	}
+	
 	let my_data = main_boid.live(data);
 	socket.emit('update_info', my_data);
-	// console.log(distance([0, 0, 0], my_data.velocity));
 	//<<<<<<<<<<others
 	let plane_index = 1;
 	let dir_vect = undefined;
-	for (var i = 0; i < data.length; i++) {
-		if (main_boid.id != data[i].id) {
-			let other_boid = data[i];
-			dir_vect = to_vector3(other_boid.velocity).normalize();
-			planes[plane_index].position.set(other_boid.position[0], other_boid.position[1], other_boid.position[2]);
+	//<<<<<<<<<<raw data
+	// for (var i = 0; i < data.length; i++) {
+	// 	if (main_boid.id != data[i].id) {
+	// 		let other_boid = data[i];
+	// 		dir_vect = to_vector3(other_boid.velocity).normalize();
+	// planes[plane_index].position.set(other_boid.position[0], other_boid.position[1], other_boid.position[2]);
+	//>>>>>>>>>>raw data
+	//<<<<<<<<<<interpolated data
+	for (var i = 0; i < inter_data.length; i++) {
+		if (main_boid.id != inter_data[i].id) {
+			let other_boid = inter_data[i];
+			dir_vect = (other_boid.velocity.clone()).normalize();
+			planes[plane_index].position.set(other_boid.position.x, other_boid.position.y, other_boid.position.z);
+	//>>>>>>>>interpolated data
 			let body_x_matrix = (new THREE.Matrix4()).makeRotationFromQuaternion((new THREE.Quaternion()).setFromUnitVectors(new THREE.Vector3(0, 0, -1), (new THREE.Vector3(0, dir_vect.y, -1)).normalize()));
 			let body_y_matrix = (new THREE.Matrix4()).makeRotationFromQuaternion((new THREE.Quaternion()).setFromUnitVectors(new THREE.Vector3(0, 0, -1), (new THREE.Vector3(dir_vect.x, 0, dir_vect.z)).normalize()));
 			planes[plane_index].rotation.setFromRotationMatrix(body_y_matrix.multiply(body_x_matrix));
@@ -131,6 +133,7 @@ function animate() {
 	//>>>>>>>>>>others
 	//main boid rotations
 	dir_vect = main_boid.velocity.clone().normalize();
+	camera_queue.push(dir_vect.clone());
 	let body_x_matrix = (new THREE.Matrix4()).makeRotationFromQuaternion((new THREE.Quaternion()).setFromUnitVectors(new THREE.Vector3(0, 0, -1), (new THREE.Vector3(0, dir_vect.y, -1)).normalize()));
 	let body_y_matrix = (new THREE.Matrix4()).makeRotationFromQuaternion((new THREE.Quaternion()).setFromUnitVectors(new THREE.Vector3(0, 0, -1), (new THREE.Vector3(dir_vect.x, 0, dir_vect.z)).normalize()));
 	main_boid.geom.rotation.setFromRotationMatrix(body_y_matrix.multiply(body_x_matrix));
@@ -146,12 +149,13 @@ function animate() {
 
 	let y_matrix = (new THREE.Matrix4()).makeRotationY(-y_rotation);
 	let x_matrix = (new THREE.Matrix4()).makeRotationX(x_rotation / 2);
-	let q = (new THREE.Quaternion()).setFromUnitVectors(new THREE.Vector3(0, 0, 1), dir_vect);
+	// let q = (new THREE.Quaternion()).setFromUnitVectors(new THREE.Vector3(0, 0, 1), dir_vect); // without camera delay
+	let q = (new THREE.Quaternion()).setFromUnitVectors(new THREE.Vector3(0, 0, 1), camera_queue.get_average()); // with camera delay
 	let velocity_camera_matrix = (new THREE.Matrix4()).makeRotationFromQuaternion(q);
 
 	dir_vect.set(0, 0, -camera_dist);
 	dir_vect.applyMatrix4(x_matrix.multiply(y_matrix));
-	dir_vect.applyMatrix4(velocity_camera_matrix);
+	dir_vect.applyMatrix4(velocity_camera_matrix); // tracking camera
 
 	camera.position.x = main_boid.position.x + dir_vect.x;
 	camera.position.y = main_boid.position.y + dir_vect.y;

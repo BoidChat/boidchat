@@ -1,20 +1,16 @@
 const max_velocity = 0.5;
 const min_velocity = 0.2;
-const base_free_movement_radius = 30; //radius where icentric force(not limited by max_force) starts
-// const base_free_movement_radius = 20; //radius where icentric force(not limited by max_force) starts
-// const free_movement_radius = 20; //radius where icentric force(not limited by max_force) starts
+const base_free_movement_radius = 50; //radius where icentric force(not limited by max_force) starts
 const max_force = 0.03;
 const noise_const = 1 / 10;
 const max_angular_velocity = Math.PI/2000 //rad./ms
 
 
 function Boid(geom, base) {
-	this.position = rand_vect(30); //need changes
-	// this.position = rand_vect(20); //need changes
+	this.position = rand_vect(50); //need changes
 	this.velocity = rand_vect(0.5);
 	this.acceleration = new THREE.Vector3();
 	this.perception = 10;
-	// this.perception = 8;
 	this.geom = geom;
 	this.geom.position.set(this.position.x, this.position.y, this.position.z);
 	this.name = base.name;
@@ -32,7 +28,7 @@ Boid.prototype.get_base = function() {
 		position: this.position.toArray(),
 		velocity: this.velocity.toArray(),
 		neighbors: this.neighbors
-	};
+	};``
 };
 
 Boid.prototype.live = function(data) {
@@ -68,7 +64,6 @@ Boid.prototype.adjust_by_time = function() {
 	this.last_live = new_time;
 	let new_vel = this.velocity.clone().add(this.acceleration);
 	let current_angle = this.velocity.angleTo(new_vel);
-	console.log(1000 * current_angle / elapsed);
 	let target_angle = elapsed * max_angular_velocity;
 	if(current_angle > target_angle){
 		let vel_length = new_vel.length();
@@ -158,7 +153,7 @@ Boid.prototype.apply_attraction_to_center = function(count) {
 		free_movement_radius = Math.pow((free_movement_coafitient * count * Math.pow(this.perception, 3)), 1 / 3);
 	}
 	let dist_to_center = this.position.length();
-	let outer_radius = free_movement_radius * 0.3; //coordinate center should be (0 0 0)
+	let outer_radius = free_movement_radius * 0.5; //coordinate center should be (0 0 0)
 	if (dist_to_center > free_movement_radius) {
 		let diff = free_movement_radius - dist_to_center;
 		let d = normalize_vect(this.position.clone(), max_force * (diff / outer_radius));

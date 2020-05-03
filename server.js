@@ -29,6 +29,7 @@ function User(name, socket, cluster_id) {
 	this.velocity = [0, 0, 0];
 	this.neighbors = [];
 	this.viewed = false;
+	this.sync_int = 0;
 }
 
 //updating user info
@@ -39,6 +40,7 @@ function update_user(data) {
 			user.position = data.position;
 			user.velocity = data.velocity;
 			user.neighbors = data.neighbors;
+			user.sync_int += 1;
 		}
 	}
 }
@@ -218,7 +220,6 @@ io.sockets.on('connection', (socket) => {
 	});
 
 });
-
 setInterval(() => {
 	io.emit('live', toArray());
 }, 1000 / 60);
