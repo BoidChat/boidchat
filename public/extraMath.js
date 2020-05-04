@@ -51,7 +51,7 @@ function distance(a, b) {
 }
 
 function divide_scalar(vect, scalar) {
-	for (let i = 0; i < 3; i++) {
+	for (let i = 0; i < vect.length; i++) {
 		vect[i] /= scalar;
 	}
 	return vect;
@@ -65,7 +65,11 @@ function multiply_scalar(vect, scalar) {
 }
 
 function add_to(a, b) {
-	for (let i = 0; i < 3; i++) {
+	if(a.length == 0){
+		a = new Array(b.length);
+		a.fill(0);
+	}
+	for (let i = 0; i < b.length; i++) {
 		a[i] += b[i];
 	}
 	return a;

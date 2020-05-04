@@ -13,7 +13,8 @@ const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 const controls = new THREE.OrbitControls(camera, renderer.domElement);
-const camera_queue = new Vector_Queue(60);
+const camera_queue = new ML_Queue(60);
+const mouse_queue = new ML_Queue(60);
 
 
  scene.background = new THREE.CubeTextureLoader().setPath('images/panorama/').load(['px.png', 'nx.png',
@@ -140,8 +141,15 @@ function animate() {
 
 	//camera movement around boid
 	camera_dist = 10;
-	let x_rotation = ((mouse.y / window.innerHeight) - 0.5) * Math.PI * 2;
-	let y_rotation = ((mouse.x / window.innerWidth) - 0.5) * Math.PI * 2;
+	mouse_queue.push([mouse.x, mouse.y]);
+	let mouse_average = mouse_queue.get_average_arr();
+	console.log(mouse.x, mouse.y, mouse_average);
+	//with mouse delay
+	let x_rotation = ((mouse_average[1] / window.innerHeight) - 0.5) * Math.PI * 2;
+	let y_rotation = ((mouse_average[0] / window.innerWidth) - 0.5) * Math.PI * 2;
+	//without muse delay
+	// let x_rotation = ((mouse.y / window.innerHeight) - 0.5) * Math.PI * 2;
+	// let y_rotation = ((mouse.x / window.innerWidth) - 0.5) * Math.PI * 2;
 	//old version
 	// camera.position.x = main_boid.position.x + Math.cos(0.5 * x_rotation) * camera_dist * Math.sin(-y_rotation);
 	// camera.position.z = main_boid.position.z + Math.cos(0.5 * x_rotation) * camera_dist * Math.cos(-y_rotation);
@@ -150,7 +158,7 @@ function animate() {
 	let y_matrix = (new THREE.Matrix4()).makeRotationY(-y_rotation);
 	let x_matrix = (new THREE.Matrix4()).makeRotationX(x_rotation / 2);
 	// let q = (new THREE.Quaternion()).setFromUnitVectors(new THREE.Vector3(0, 0, 1), dir_vect); // without camera delay
-	let q = (new THREE.Quaternion()).setFromUnitVectors(new THREE.Vector3(0, 0, 1), camera_queue.get_average()); // with camera delay
+	let q = (new THREE.Quaternion()).setFromUnitVectors(new THREE.Vector3(0, 0, 1), camera_queue.get_average_V3()); // with camera delay
 	let velocity_camera_matrix = (new THREE.Matrix4()).makeRotationFromQuaternion(q);
 
 	dir_vect.set(0, 0, -camera_dist);

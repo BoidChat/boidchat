@@ -1,6 +1,7 @@
 const max_velocity = 0.5;
 const min_velocity = 0.2;
 const base_free_movement_radius = 50; //radius where icentric force(not limited by max_force) starts
+let current_free_movement_radius = 50; //radius where icentric force(not limited by max_force) starts
 const max_force = 0.03;
 const noise_const = 1 / 10;
 const max_angular_velocity = Math.PI/2000 //rad./ms
@@ -38,11 +39,9 @@ Boid.prototype.live = function(data) {
 	this.apply_cohesion(data);
 	this.acceleration = normalize_vect(this.acceleration, max_force);
 	this.apply_attraction_to_center(data.length); //modifies acceleration, repels from border
-	// this.acceleration = normalize_vect(this.acceleration, max_force);
+	this.add_obstacles();
 	this.regress_to_averedge();
-	// this.velocity.add(this.acceleration);
 	this.adjust_by_time();
-	// this.velocity = normalize_vect(this.velocity, max_velocity);
 	this.velocity = normalize_vect2(this.velocity, max_velocity, min_velocity);
 	this.update_neighbors(data);
 	this.position.add(this.velocity);
@@ -75,6 +74,29 @@ Boid.prototype.adjust_by_time = function() {
 		this.velocity.add(this.acceleration);
 	}
 };
+
+Boid.prototype.add_obstacles = function(){
+	let live_obstacles = get_active();
+	let all_vectors = new THREE.Vector3();
+	let count = 0;
+	let position = this.position;
+	for (let i = 0; i < live_obstacles.length; i++) {
+		let ob_position = to_vector3(live_obstacles[i].position).multiplyScalar(current_free_movement_radius);
+		// console.log(position.distanceTo(ob_position), live_obstacles[i].current_radius);
+		if (position.distanceTo(ob_position) < live_obstacles[i].current_radius) {
+			// let ob_position = to_vector3(ob_position);
+			let from_obstacle = (position.clone()).sub(ob_position);
+			let k = from_obstacle.length();
+			let multiplier = 5 * ((1 - (from_obstacle.length() / live_obstacles[i].current_radius)) ** 2);
+			all_vectors.add(from_obstacle.multiplyScalar(multiplier * max_force));
+			count++;
+		}
+	}
+	if (count > 0) {
+		all_vectors.divideScalar(count);
+		this.acceleration.add(all_vectors);
+	}
+}
 
 Boid.prototype.regress_to_averedge = function() {
 	let avg = (max_velocity + min_velocity) / 2;
@@ -152,6 +174,7 @@ Boid.prototype.apply_attraction_to_center = function(count) {
 	else {
 		free_movement_radius = Math.pow((free_movement_coafitient * count * Math.pow(this.perception, 3)), 1 / 3);
 	}
+	current_free_movement_radius = free_movement_radius;
 	let dist_to_center = this.position.length();
 	let outer_radius = free_movement_radius * 0.5; //coordinate center should be (0 0 0)
 	if (dist_to_center > free_movement_radius) {
