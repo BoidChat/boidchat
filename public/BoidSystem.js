@@ -4,7 +4,7 @@ const base_free_movement_radius = 50; //radius where icentric force(not limited 
 let current_free_movement_radius = 50; //radius where icentric force(not limited by max_force) starts
 const max_force = 0.03;
 const noise_const = 1 / 10;
-const max_angular_velocity = Math.PI/2000 //rad./ms
+const max_angular_velocity = Math.PI / 2000; //rad./ms
 
 
 function Boid(geom, base) {
@@ -29,7 +29,7 @@ Boid.prototype.get_base = function() {
 		position: this.position.toArray(),
 		velocity: this.velocity.toArray(),
 		neighbors: this.neighbors
-	};``
+	};
 };
 
 Boid.prototype.live = function(data) {
@@ -64,18 +64,18 @@ Boid.prototype.adjust_by_time = function() {
 	let new_vel = this.velocity.clone().add(this.acceleration);
 	let current_angle = this.velocity.angleTo(new_vel);
 	let target_angle = elapsed * max_angular_velocity;
-	if(current_angle > target_angle){
+	if (current_angle > target_angle) {
 		let vel_length = new_vel.length();
 		let rotation_axis = this.velocity.clone().cross(new_vel).normalize();
 		this.velocity.applyAxisAngle(rotation_axis, target_angle);
 		streach_vect(this.velocity, vel_length);
 	}
-	else{
+	else {
 		this.velocity.add(this.acceleration);
 	}
 };
 
-Boid.prototype.add_obstacles = function(){
+Boid.prototype.add_obstacles = function() {
 	let live_obstacles = get_active();
 	let all_vectors = new THREE.Vector3();
 	let count = 0;
@@ -96,11 +96,10 @@ Boid.prototype.add_obstacles = function(){
 		all_vectors.divideScalar(count);
 		this.acceleration.add(all_vectors);
 	}
-}
+};
 
 Boid.prototype.regress_to_averedge = function() {
 	let avg = (max_velocity + min_velocity) / 2;
-	let l = this.velocity.length();
 	let diff = (avg - this.velocity.length()) / avg;
 	this.acceleration.add(streach_vect(this.velocity.clone(), max_force * diff));
 };

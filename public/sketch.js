@@ -17,9 +17,9 @@ const camera_queue = new ML_Queue(60);
 const mouse_queue = new ML_Queue(60);
 
 
- scene.background = new THREE.CubeTextureLoader().setPath('images/panorama/').load(['px.png', 'nx.png',
- 	'py.png', 'ny.png', 'pz.png', 'nz.png']);
- scene.background.minFilter = THREE.LinearFilter;
+scene.background = new THREE.CubeTextureLoader().setPath('images/panorama/').load(['px.png', 'nx.png',
+	'py.png', 'ny.png', 'pz.png', 'nz.png']);
+scene.background.minFilter = THREE.LinearFilter;
 
 let loadingManager = new THREE.LoadingManager();
 loadingManager.onStart = function() {
@@ -105,7 +105,7 @@ function animate() {
 			plane_count--;
 		}
 	}
-	
+
 	let my_data = main_boid.live(data);
 	socket.emit('update_info', my_data);
 	//<<<<<<<<<<others
@@ -124,7 +124,7 @@ function animate() {
 			let other_boid = inter_data[i];
 			dir_vect = (other_boid.velocity.clone()).normalize();
 			planes[plane_index].position.set(other_boid.position.x, other_boid.position.y, other_boid.position.z);
-	//>>>>>>>>interpolated data
+			//>>>>>>>>interpolated data
 			let body_x_matrix = (new THREE.Matrix4()).makeRotationFromQuaternion((new THREE.Quaternion()).setFromUnitVectors(new THREE.Vector3(0, 0, -1), (new THREE.Vector3(0, dir_vect.y, -1)).normalize()));
 			let body_y_matrix = (new THREE.Matrix4()).makeRotationFromQuaternion((new THREE.Quaternion()).setFromUnitVectors(new THREE.Vector3(0, 0, -1), (new THREE.Vector3(dir_vect.x, 0, dir_vect.z)).normalize()));
 			planes[plane_index].rotation.setFromRotationMatrix(body_y_matrix.multiply(body_x_matrix));

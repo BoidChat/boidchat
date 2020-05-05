@@ -9,8 +9,8 @@ function rand_vect(multiplier) {
 }
 
 function streach_vect(vect, new_length) {
-	let length =  vect.length();
-	if (length > 0){
+	let length = vect.length();
+	if (length > 0) {
 		return vect.multiplyScalar(new_length / vect.length());
 	}
 	return vect;
@@ -65,7 +65,7 @@ function multiply_scalar(vect, scalar) {
 }
 
 function add_to(a, b) {
-	if(a.length == 0){
+	if (a.length == 0) {
 		a = new Array(b.length);
 		a.fill(0);
 	}
