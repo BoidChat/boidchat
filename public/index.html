@@ -18,7 +18,7 @@
 	<meta name="theme-color" content="#ffffff">
 </head>
 
-<body>
+<body id="canvas">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
 	<script src="https://unpkg.com/three@0.114.0/build/three.js"></script>
 	<script src="https://unpkg.com/three@0.114.0/examples/js/controls/OrbitControls.js"></script>
@@ -33,9 +33,12 @@
 	<script src="chat.js"></script>
 	<script src="flockers.js"></script>
 
-	<div id="chatBox"></div>
-	<input type="text" placeholder="rašyk tekstą" id="TextBox" onkeypress="sendMessage(event)" />
-	<div id="flockers"></div>
+	<div id="Box">
+		<div id="chatBox"></div>
+		<input type="text" placeholder="rašyk tekstą" id="TextBox" onkeypress="sendMessage(event)" />
+		<a id="SendButton" onclick="sendButton()">siųsti</a>
+		<div id="flockers"></div>
+	</div>
 </body>
 
 </html>

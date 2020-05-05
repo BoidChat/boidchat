@@ -5,6 +5,11 @@ function sendMessage(evt) {
 	}
 }
 
+function sendButton(){
+	socket.emit('send_message', document.getElementById("TextBox").value);
+	document.getElementById("TextBox").value = "";
+}
+
 socket.on('receive_message', (data, name) => {
 	var node = document.createElement("p");
 	node.id = "chat";

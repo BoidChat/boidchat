@@ -17,7 +17,8 @@ const camera_queue = new ML_Queue(60);
 const mouse_queue = new ML_Queue(60);
 
 
-scene.background = new THREE.CubeTextureLoader().setPath('images/panorama/').load(['px.png', 'nx.png', 'py.png', 'ny.png', 'pz.png', 'nz.png']);
+scene.background = new THREE.CubeTextureLoader().setPath('images/panorama/').load(['px.png', 'nx.png',
+	'py.png', 'ny.png', 'pz.png', 'nz.png']);
 scene.background.minFilter = THREE.LinearFilter;
 
 let loadingManager = new THREE.LoadingManager();
@@ -87,7 +88,6 @@ socket.on('live', (d) => {
 
 socket.emit('register' /**insert user name here as parameter*/); //sends request to server to create new boid, initialisation
 
-
 function animate() {
 
 	if (data.length != planes.length) { //adjusts planes to comply with data
@@ -139,7 +139,7 @@ function animate() {
 	main_boid.geom.rotation.setFromRotationMatrix(body_y_matrix.multiply(body_x_matrix));
 
 	//camera movement around boid
-	const camera_dist = 10;
+	camera_dist = 10;
 	mouse_queue.push([mouse.x, mouse.y]);
 	let mouse_average = mouse_queue.get_average_arr();
 	console.log(mouse.x, mouse.y, mouse_average);
