@@ -35,7 +35,7 @@ function normalize_vect2(vect, max_length, min_length) {
 }
 
 function arr_length(arr) {
-	sum = 0;
+	var sum = 0;
 	for (let i = 0; i < arr.length; i++) {
 		sum += arr[i] ** 2;
 	}
@@ -43,7 +43,7 @@ function arr_length(arr) {
 }
 
 function distance(a, b) {
-	sum = 0;
+	var sum = 0;
 	for (let i = 0; i < 3; i++) {
 		sum += (a[i] - b[i]) ** 2;
 	}
