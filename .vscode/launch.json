@@ -23,7 +23,17 @@
 			"url": "http://localhost:80/",
 			"webRoot": "${workspaceFolder}/TextMesg/",
 			//"preLaunchTask": "DelayClientLaunch",
-			"internalConsoleOptions": "openOnFirstSessionStart"
+			"internalConsoleOptions": "openOnFirstSessionStart",
+			"preLaunchTask": {
+				"identifier": "ng serve --port 80",
+				"type": "npm",
+				"script": "start",
+				"problemMatcher": [],
+				"group": {
+					"kind": "build",
+					"isDefault": true
+        		}
+			}
 		}
 	],
 	"compounds": [
