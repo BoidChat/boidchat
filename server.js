@@ -84,11 +84,11 @@ function add_new_user(socket, name) {
 }
 
 function toArray(cluster_name = "") {
-	// if (cluster_name != "") { 
+	// if (cluster_name != "") {
 	// 	return Array.from(clusters.get(cluster_name).values()); //
 	// }
 	// else {
-		return Array.from(main.values());
+	return Array.from(main.values());
 	// }
 }
 
@@ -187,13 +187,13 @@ function add_names() {
 let clusters = new Array();//sorted by user count, clusters array
 let main = new Map();//map that stores loged on users {user_id : user}
 
-function create_obstacles(){
+function create_obstacles() {
 	let count = Math.ceil((5 + connections) / 3);
-	if (count > 150){
+	if (count > 150) {
 		count = 150;
 	}
 	let obstacles = new Array();
-	for (let i = 0; i < count; i++){
+	for (let i = 0; i < count; i++) {
 		let position = new Array(3);
 		let sq_sum = 0;
 		for (let i = 0; i < 3; i++) {
@@ -201,7 +201,7 @@ function create_obstacles(){
 			sq_sum += position[i] ** 2;
 		}
 		sq_sum = sq_sum ** 0.5;
-		if (sq_sum > 1){
+		if (sq_sum > 1) {
 			for (let i = 0; i < 3; i++) {
 				position[i] /= sq_sum;
 			}
@@ -209,7 +209,7 @@ function create_obstacles(){
 		let start_time = Math.floor(Math.random() * 1000);
 		let life_time = Math.floor(Math.random() * 10000 + 5000);
 		let radius = Math.random() * 5 + 20;
-		let obstacle = {position:position, radius:radius, current_radius:0, start_left:start_time, life_left:life_time, life_time:life_time};
+		let obstacle = { position: position, radius: radius, current_radius: 0, start_left: start_time, life_left: life_time, life_time: life_time };
 		obstacles.push(obstacle);
 	}
 	return obstacles;
@@ -249,15 +249,15 @@ setInterval(() => {
 
 setInterval(() => {
 	clusterize();
-	for (let j = 0; j < clusters.length; j++){
+	for (let j = 0; j < clusters.length; j++) {
 		let cid = clusters[j].name;
 		let flockers = [];
-		for(let i = 0; i < clusters[j].length; i++){
-			flockers.push(main.get(clusters[j][i]).name)
+		for (let i = 0; i < clusters[j].length; i++) {
+			flockers.push(main.get(clusters[j][i]).name);
 		}
 		io.in(cid).emit('cluster_info', flockers.sort());
 	}
-	if (connections > 0){
+	if (connections > 0) {
 		let obstacles = create_obstacles();
 		io.sockets.emit('obstacles', obstacles);
 	}

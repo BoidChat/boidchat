@@ -2,6 +2,11 @@ body {
 	margin: 0px;
 }
 
+#body{
+	margin: 0px;
+	position: relative;
+}
+
 canvas {
 	width: 100%;
 	height: 100%;
@@ -42,33 +47,34 @@ canvas {
 
 	padding: 10px;
 	margin: 0px;
-	width: 30%;
+	width: 300px;
 	height: 50%;
 
 	z-index: 2;
 	position: absolute;
-	left: 0px;
-	bottom: 5%;
+	left: 0;
+	bottom: 41px;
 
 }
 
-#TextBox {
+#textBox {
 	background: rgba(24, 24, 24, 0.2);
 	border: 1px solid rgba(94, 94, 94, 0.2);
 	overflow: auto;
 	color: white;
 	padding: 10px;
 	margin: 0px;
-	width: 30%;
-	height: 2%;
+	width: 300px;
+	height: 20px;
 
 	z-index: 3;
-	position: absolute;
-	left: 0px;
-	bottom: 0px;
+	left: 0;
+	bottom: 0;
 }
 
 #chat{
+	width: 80%; 
+	float:left;
 	word-wrap: break-word;
 	color: white;
 }
@@ -81,11 +87,30 @@ canvas {
 
 	padding: 10px;
 	margin: 0px;
-	width: 30%;
+	width: 300px;
 	height: 20%;
 
-	z-index: 2;
 	position: absolute;
-	left: 0px;
+
+	z-index: 2;
+	left: 0;
 	top: 0%;
+}
+
+#sendButton{
+	background: rgba(24, 24, 24, 0.2);
+	border: 1px solid rgba(94, 94, 94, 0.2);
+	color: white;
+	padding: 10px;
+	margin: 0px;
+
+	z-index: 3;
+	bottom: 0;
+
+	text-align: center;
+}
+
+.parent {
+	position: absolute;
+	bottom: 0;
 }

@@ -9,8 +9,8 @@ function rand_vect(multiplier) {
 }
 
 function streach_vect(vect, new_length) {
-	let length =  vect.length();
-	if (length > 0){
+	let length = vect.length();
+	if (length > 0) {
 		return vect.multiplyScalar(new_length / vect.length());
 	}
 	return vect;
@@ -35,7 +35,7 @@ function normalize_vect2(vect, max_length, min_length) {
 }
 
 function arr_length(arr) {
-	sum = 0;
+	var sum = 0;
 	for (let i = 0; i < arr.length; i++) {
 		sum += arr[i] ** 2;
 	}
@@ -43,7 +43,7 @@ function arr_length(arr) {
 }
 
 function distance(a, b) {
-	sum = 0;
+	var sum = 0;
 	for (let i = 0; i < 3; i++) {
 		sum += (a[i] - b[i]) ** 2;
 	}
@@ -65,7 +65,7 @@ function multiply_scalar(vect, scalar) {
 }
 
 function add_to(a, b) {
-	if(a.length == 0){
+	if (a.length == 0) {
 		a = new Array(b.length);
 		a.fill(0);
 	}
