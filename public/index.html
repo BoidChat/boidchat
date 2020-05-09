@@ -33,11 +33,12 @@
 	<script src="chat.js"></script>
 	<script src="flockers.js"></script>
 
-	<div id="Box">
-		<div id="chatBox"></div>
-		<input type="text" placeholder="rašyk tekstą" id="TextBox" onkeypress="sendMessage(event)" />
-		<a id="SendButton" onclick="sendButton()">siųsti</a>
-		<div id="flockers"></div>
+
+	<div id="flockers"></div>
+	<div id="chatBox"></div>
+	<div class="parent">
+		<input type="text" placeholder="rašyk tekstą" id="textBox" onkeypress="sendMessage(event)" />
+		<a id="sendButton" onclick="sendButton()">siųsti</a>
 	</div>
 </body>
 
