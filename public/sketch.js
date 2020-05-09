@@ -17,9 +17,9 @@ const camera_queue = new ML_Queue(60);
 const mouse_queue = new ML_Queue(60);
 
 
- scene.background = new THREE.CubeTextureLoader().setPath('images/panorama/').load(['px.png', 'nx.png',
- 	'py.png', 'ny.png', 'pz.png', 'nz.png']);
- scene.background.minFilter = THREE.LinearFilter;
+//  scene.background = new THREE.CubeTextureLoader().setPath('images/panorama/').load(['px.png', 'nx.png',
+//  	'py.png', 'ny.png', 'pz.png', 'nz.png']);
+//  scene.background.minFilter = THREE.LinearFilter;
 
 let loadingManager = new THREE.LoadingManager();
 loadingManager.onStart = function() {
@@ -82,11 +82,25 @@ socket.on('live', (d) => {
 	if (ready) {
 		data = d; //TODO need to put as argument to 'animate' instead of global varieble
 		inter_data = interpolate(data, main_boid.id);
+		let my_data = main_boid.live(data);
+		socket.emit('update_info', my_data);
 		requestAnimationFrame(animate);
 	}
 });
 
-socket.emit('register' /**insert user name here as parameter*/); //sends request to server to create new boid, initialisation
+socket.on('registration_failed', (response) => { // response.error contains error message
+	let name = undefined;
+	//your code in case of registration failure here
+	socket.emit('register' , Math.floor(Math.random() * 100000).toString()/**insert user name here as parameter*/); //sends request to server to create new boid, initialisation
+	// socket.emit('register' , name); //sends request to server to create new boid, initialisation
+});
+
+function registration(name){
+	socket.emit('register' , Math.floor(Math.random() * 100000).toString()/**insert user name here as parameter*/); //sends request to server to create new boid, initialisation
+	// socket.emit('register' , name); //sends request to server to create new boid, initialisation
+}
+
+registration("username");
 
 
 function animate() {
@@ -106,8 +120,8 @@ function animate() {
 		}
 	}
 	
-	let my_data = main_boid.live(data);
-	socket.emit('update_info', my_data);
+	// let my_data = main_boid.live(data);
+	// socket.emit('update_info', my_data);
 	//<<<<<<<<<<others
 	let plane_index = 1;
 	let dir_vect = undefined;
@@ -143,7 +157,7 @@ function animate() {
 	camera_dist = 10;
 	mouse_queue.push([mouse.x, mouse.y]);
 	let mouse_average = mouse_queue.get_average_arr();
-	console.log(mouse.x, mouse.y, mouse_average);
+	// console.log(mouse.x, mouse.y, mouse_average);
 	//with mouse delay
 	let x_rotation = ((mouse_average[1] / window.innerHeight) - 0.5) * Math.PI * 2;
 	let y_rotation = ((mouse_average[0] / window.innerWidth) - 0.5) * Math.PI * 2;
