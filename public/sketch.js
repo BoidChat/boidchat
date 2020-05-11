@@ -17,9 +17,9 @@ const camera_queue = new ML_Queue(60);
 const mouse_queue = new ML_Queue(60);
 
 
-scene.background = new THREE.CubeTextureLoader().setPath('images/panorama/').load(['px.png', 'nx.png',
-	'py.png', 'ny.png', 'pz.png', 'nz.png']);
-scene.background.minFilter = THREE.LinearFilter;
+// scene.background = new THREE.CubeTextureLoader().setPath('images/panorama/').load(['px.png', 'nx.png',
+// 	'py.png', 'ny.png', 'pz.png', 'nz.png']);
+// scene.background.minFilter = THREE.LinearFilter;
 
 let loadingManager = new THREE.LoadingManager();
 loadingManager.onStart = function() {
@@ -75,6 +75,7 @@ socket.on('init', (data) => { //server acknoledging new boid initialisation send
 			}
 		});
 	});
+	$('#loginModal').modal('hide');
 });
 let data = undefined;
 let inter_data = undefined;
@@ -88,19 +89,19 @@ socket.on('live', (d) => {
 	}
 });
 
-socket.on('registration_failed', (response) => { // response.error contains error message
-	let name = undefined;
-	//your code in case of registration failure here
-	socket.emit('register' , Math.floor(Math.random() * 100000).toString()/**insert user name here as parameter*/); //sends request to server to create new boid, initialisation
-	// socket.emit('register' , name); //sends request to server to create new boid, initialisation
-});
+// socket.on('registration_failed', (response) => { // response.error contains error message
+// 	let name = undefined;
+// 	//your code in case of registration failure here
+// 	socket.emit('register' , Math.floor(Math.random() * 100000).toString()/**insert user name here as parameter*/); //sends request to server to create new boid, initialisation
+// 	// socket.emit('register' , name); //sends request to server to create new boid, initialisation
+// });
 
-function registration(name){
-	socket.emit('register' , Math.floor(Math.random() * 100000).toString()/**insert user name here as parameter*/); //sends request to server to create new boid, initialisation
-	// socket.emit('register' , name); //sends request to server to create new boid, initialisation
-}
+// function registration(name){
+// 	//socket.emit('register' , Math.floor(Math.random() * 100000).toString()/**insert user name here as parameter*/); //sends request to server to create new boid, initialisation
+// 	socket.emit('register' , name); //sends request to server to create new boid, initialisation
+// }
 
-registration("username");
+//registration("username");
 
 function animate() {
 

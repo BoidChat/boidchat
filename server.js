@@ -73,11 +73,11 @@ function get_rand_name() {
 function add_new_user(socket, name) {
 	let values = Array.from(main.values());
 	for (let i = 0; i < values.length; i++) {
-		if (values[i] == name) { return { error: 'Name taken!' }; }
+		if (values[i].name.trim().toLowerCase() == name.trim().toLowerCase()) { return { error: 'Name taken!', name:name }; }
 	}
 	let cluster = new Cluster(get_rand_name());
 	socket.join(cluster.name); //user joins cluster/room
-	let user = new User(name.trim().toLowerCase(), socket, cluster.name);
+	let user = new User(name, socket, cluster.name);
 	main.set(socket.id, user);
 	cluster.push(socket.id);
 	return user;
@@ -216,15 +216,20 @@ function create_obstacles() {
 }
 
 io.sockets.on('connection', (socket) => {
-	socket.on('register', (/**user data */) => {
-		connections++;
-		// io.to(socket.id).emit('loadEveryone', connections);
-		// socket.broadcast.emit('NewConnection');
-		console.log('New connection ' + socket.id);
-		let meaningfull_name = Math.floor(Math.random() * 100000).toString();
-		let user = add_new_user(socket, meaningfull_name); //TODO give meaningfull name instead of number
-		socket.emit('init', { base: user, count: connections });
-	});
+	socket.on('register', (name) => {
+        connections++;
+        // io.to(socket.id).emit('loadEveryone', connections);
+        // socket.broadcast.emit('NewConnection');
+        console.log('New connection ' + socket.id);
+        // let meaningfull_name = Math.floor(Math.random() * 100000).toString();
+        let user = add_new_user(socket, name); //TODO give meaningfull name instead of number
+        if(user.error != undefined){
+            socket.emit('registration_failed', { error: user});
+        }
+        else{
+            socket.emit('init', { base: user, count: connections });
+        }
+    });
 
 	socket.on('send_message', (data) => { //receives message and brodcasts it to all same cluster members
 		room = main.get(socket.id).cluster_id;
