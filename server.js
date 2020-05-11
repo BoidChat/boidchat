@@ -73,7 +73,7 @@ function get_rand_name() {
 function add_new_user(socket, name) {
 	let values = Array.from(main.values());
 	for (let i = 0; i < values.length; i++) {
-		if (values[i].name.trim().toLowerCase() == name.trim().toLowerCase()) { return { error: 'Name taken!', name:name }; }
+		if (values[i].name.trim().toLowerCase() == name.trim().toLowerCase()) { return { error: 'Vardas užimtas', name:name }; }
 	}
 	let cluster = new Cluster(get_rand_name());
 	socket.join(cluster.name); //user joins cluster/room
@@ -224,7 +224,7 @@ io.sockets.on('connection', (socket) => {
         // let meaningfull_name = Math.floor(Math.random() * 100000).toString();
         let user = add_new_user(socket, name); //TODO give meaningfull name instead of number
         if(user.error != undefined){
-            socket.emit('registration_failed', { error: user});
+            socket.emit('registration_failed', { error: user.error, name: name});
         }
         else{
             socket.emit('init', { base: user, count: connections });
