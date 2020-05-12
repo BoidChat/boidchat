@@ -53,7 +53,7 @@ canvas {
 	z-index: 2;
 	position: absolute;
 	left: 0;
-	bottom: 41px;
+	bottom: 51px;
 
 }
 
@@ -65,7 +65,7 @@ canvas {
 	padding: 10px;
 	margin: 0px;
 	width: 300px;
-	height: 20px;
+	height: 40px;
 
 	z-index: 3;
 	left: 0;
@@ -112,5 +112,5 @@ canvas {
 
 .parent {
 	position: absolute;
-	bottom: 0;
+	bottom: 10px;
 }
