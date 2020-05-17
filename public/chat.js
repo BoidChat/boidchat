@@ -29,6 +29,21 @@ function linkify(text, element) {
     });
 }
 
+function hideChat(){
+	document.getElementById("chatBox").style.visibility = "hidden";
+	document.getElementById("chatHeader").style.bottom = "50px";
+	document.getElementById("minmize").style.visibility = "hidden";
+	document.getElementById("maximize").style.visibility = "visible";
+
+}
+
+function showChat(){
+	document.getElementById("chatBox").style.visibility = "visible";
+	document.getElementById("chatHeader").style.bottom = "450px";
+	document.getElementById("minmize").style.visibility = "visible";
+	document.getElementById("maximize").style.visibility = "hidden";
+}
+
 
 
 

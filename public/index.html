@@ -24,7 +24,6 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 
-
 	  <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">
 		<div class="modal-dialog" role="document">
 		  <div class="modal-content">
@@ -69,15 +68,18 @@
 	<script src="ML_Queue.js"></script>
 	<script src="BoidSystem.js"></script>
 	<script src="interpolation.js"></script>
-	<script src="sketch.js"></script>
 	<script src="obstacles.js"></script>
+	<script src="sketch.js"></script>
 	<script src="chat.js"></script>
 	<script src="flockers.js"></script>
 	<script src="login.js"></script>
-	
-
 
 	<div id="flockers"></div>
+	<div id="chatHeader">
+		<a>Žinutės</a>
+		<button id="minmize" onclick="hideChat()">&#95</button>
+		<button id="maximize" onclick="showChat()">&square;</button>
+	</div>
 	<div id="chatBox"></div>
 	<div class="parent">
 		<input type="text" placeholder="rašyk tekstą" id="textBox" onkeypress="sendMessage(event)" />
