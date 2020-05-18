@@ -216,17 +216,18 @@ function create_obstacles() {
 }
 
 io.sockets.on('connection', (socket) => {
+	connections++;
+	console.log('New connection ' + socket.id);
 	socket.on('register', (name) => {
-        connections++;
         // io.to(socket.id).emit('loadEveryone', connections);
         // socket.broadcast.emit('NewConnection');
-        console.log('New connection ' + socket.id);
         // let meaningfull_name = Math.floor(Math.random() * 100000).toString();
         let user = add_new_user(socket, name); //TODO give meaningfull name instead of number
         if(user.error != undefined){
             socket.emit('registration_failed', { error: user.error, name: name});
         }
         else{
+			socket.emit('registration_success');
             socket.emit('init', { base: user, count: connections });
         }
     });

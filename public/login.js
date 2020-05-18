@@ -49,9 +49,11 @@ socket.on('registration_failed', (response) => { // response.error contains erro
 
 function registration(name){
 	//socket.emit('register' , Math.floor(Math.random() * 100000).toString()/**insert user name here as parameter*/); //sends request to server to create new boid, initialisation
-	socket.emit('register' , name); //sends request to server to create new boid, initialisation
+  socket.emit('register' , name); //sends request to server to create new boid, initialisation
 }
-
+socket.on('registration_success', function(){
+  showBoxes();
+});
 function showBoxes(){
   document.getElementById("chatHeader").style.visibility = "visible";
   document.getElementById("flockers").style.visibility = "visible";
