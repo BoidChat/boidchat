@@ -35,7 +35,7 @@
 				<input type="text"  maxlength="15" id="username"/> <br>
 			</div>
 			<div class="modal-footer">
-				<button type="submit" value="Submit" class="btn btn-outline-dark" onmouseup="registration(document.getElementById('username').value)">Prisijungti</button>
+				<button type="submit" value="Submit" class="btn btn-outline-dark" onmouseup="registration(document.getElementById('username').value);showBoxes();">Prisijungti</button>
 			</div>
 		  </div>
 		</div>
@@ -81,7 +81,7 @@
 		<button id="maximize" onclick="showChat()">&square;</button>
 	</div>
 	<div id="chatBox"></div>
-	<div class="parent">
+	<div id="sendLine" class="parent">
 		<input type="text" placeholder="rašyk tekstą" id="textBox" onkeypress="sendMessage(event)" />
 		<a id="sendButton" onclick="sendButton()">siųsti</a>
 	</div>

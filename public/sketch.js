@@ -17,9 +17,22 @@ const camera_queue = new ML_Queue(60);
 const mouse_queue = new ML_Queue(60);
 
 
- scene.background = new THREE.CubeTextureLoader().setPath('images/panorama/').load(['px.png', 'nx.png',
+scene.background = new THREE.CubeTextureLoader().setPath('images/panorama/').load(['px.png', 'nx.png',
  	'py.png', 'ny.png', 'pz.png', 'nz.png']);
- scene.background.minFilter = THREE.LinearFilter;
+scene.background.minFilter = THREE.LinearFilter;
+// not live animation
+var notLive = true;
+camera.position.x = 0;
+camera.position.z = 0;
+camera.position.y = 0;
+function notLiveAnim(){
+	if(notLive){
+		requestAnimationFrame(notLiveAnim);
+		renderer.render(scene, camera);
+	}
+}
+notLiveAnim();
+
 
 let loadingManager = new THREE.LoadingManager();
 loadingManager.onStart = function() {
@@ -77,10 +90,12 @@ socket.on('init', (data) => { //server acknoledging new boid initialisation send
 	});
 	$('#loginModal').modal('hide');
 });
+
 let data = undefined;
 let inter_data = undefined;
 socket.on('live', (d) => {
 	if (ready) {
+		notLive = false;
 		data = d; //TODO need to put as argument to 'animate' instead of global varieble
 		inter_data = interpolate(data, main_boid.id);
 		let my_data = main_boid.live(data);
@@ -88,7 +103,6 @@ socket.on('live', (d) => {
 		requestAnimationFrame(animate);
 	}
 });
-
 // socket.on('registration_failed', (response) => { // response.error contains error message
 // 	let name = undefined;
 // 	//your code in case of registration failure here

@@ -52,3 +52,10 @@ function registration(name){
 	socket.emit('register' , name); //sends request to server to create new boid, initialisation
 }
 
+function showBoxes(){
+  document.getElementById("chatHeader").style.visibility = "visible";
+  document.getElementById("flockers").style.visibility = "visible";
+  document.getElementById("chatBox").style.visibility = "visible";
+  document.getElementById("sendLine").style.visibility = "visible";
+}
+
