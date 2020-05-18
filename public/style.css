@@ -103,12 +103,11 @@ canvas {
 	background: rgba(24, 24, 24, 0.2);
 	border: 1px solid rgba(94, 94, 94, 0.2);
 	color: white;
-	padding: 10px;
 	margin: 0px;
+	height: 40px;
+	width: 80px;
 
-	z-index: 3;
-	bottom: 0;
-
+	bottom: 0px;
 	text-align: center;
 }
 
@@ -157,4 +156,14 @@ canvas {
 	margin-left: auto;
 	margin-right: auto;
 	width: 100%;
+}
+
+#blockButton{
+	display: inline-block;
+	background: rgba(24, 24, 24, 0.2);
+	border: 1px solid rgba(94, 94, 94, 0.2);
+	height: auto;
+	font-size: 15px;
+	text-align: center;
+	float: right;
 }
