@@ -31,7 +31,8 @@ function linkify(text, element) {
 
 function hideChat(){
 	document.getElementById("chatBox").style.visibility = "hidden";
-	document.getElementById("chatHeader").style.bottom = "50px";
+	var head = document.getElementById("chatHeader");
+	head.style.bottom = document.getElementById("textBox").offsetHeight + "px";
 	document.getElementById("minmize").style.visibility = "hidden";
 	document.getElementById("maximize").style.visibility = "visible";
 
@@ -39,9 +40,22 @@ function hideChat(){
 
 function showChat(){
 	document.getElementById("chatBox").style.visibility = "visible";
-	document.getElementById("chatHeader").style.bottom = "450px";
+	var head = document.getElementById("chatHeader");
+	head.style.bottom = document.getElementById("chatBox").offsetHeight + head.offsetHeight +"px" ;
 	document.getElementById("minmize").style.visibility = "visible";
 	document.getElementById("maximize").style.visibility = "hidden";
+}
+
+window.addEventListener('resize', onWindowResize, false);
+
+function onWindowResize(){
+	var head = document.getElementById("chatHeader");
+	if(document.getElementById("chatBox").style.getPropertyValue("visibility") == "hidden"){
+		head.style.bottom = document.getElementById("textBox").offsetHeight + "px";
+	}
+	else{
+		head.style.bottom = document.getElementById("chatBox").offsetHeight + head.offsetHeight +"px" ;
+	}
 }
 
 

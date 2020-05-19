@@ -55,9 +55,11 @@ socket.on('registration_success', function(){
   showBoxes();
 });
 function showBoxes(){
-  document.getElementById("chatHeader").style.visibility = "visible";
+  var head = document.getElementById("chatHeader");
+  head.style.visibility = "visible";
   document.getElementById("flockers").style.visibility = "visible";
   document.getElementById("chatBox").style.visibility = "visible";
+  head.style.bottom = document.getElementById("chatBox").offsetHeight + head.offsetHeight +"px" ;
   document.getElementById("sendLine").style.visibility = "visible";
 }
 
