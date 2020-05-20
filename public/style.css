@@ -83,13 +83,23 @@ canvas {
 
 	display: inline-block;
 }
-
-#message{
-	width: 100%; 
+#messageText{
+	width: 100%;
+	float:left;
+	margin: auto;
+}
+#messageText{
+	width: 80%; 
 	float:left;
 	word-wrap: break-word;
 	color: white;
 	margin: auto;
+}
+#messageTime{
+	width: auto;
+	color: rgba(20, 20, 20, 0.2);
+	display: inline-block;
+	float: right;
 }
 
 #flockers{
