@@ -73,7 +73,7 @@ function get_rand_name() {
 function add_new_user(socket, name) {
 	let values = Array.from(main.values());
 	for (let i = 0; i < values.length; i++) {
-		if (values[i].name.trim().toLowerCase() == name.trim().toLowerCase()) { return { error: 'Vardas užimtas', name:name }; }
+		if (values[i].name.trim().toLowerCase() == name.trim().toLowerCase()) { return { error: 'Vardas užimtas', name: name }; }
 	}
 	let cluster = new Cluster(get_rand_name());
 	socket.join(cluster.name); //user joins cluster/room
@@ -219,18 +219,18 @@ io.sockets.on('connection', (socket) => {
 	connections++;
 	console.log('New connection ' + socket.id);
 	socket.on('register', (name) => {
-        // io.to(socket.id).emit('loadEveryone', connections);
-        // socket.broadcast.emit('NewConnection');
-        // let meaningfull_name = Math.floor(Math.random() * 100000).toString();
-        let user = add_new_user(socket, name); //TODO give meaningfull name instead of number
-        if(user.error != undefined){
-            socket.emit('registration_failed', { error: user.error, name: name});
-        }
-        else{
+		// io.to(socket.id).emit('loadEveryone', connections);
+		// socket.broadcast.emit('NewConnection');
+		// let meaningfull_name = Math.floor(Math.random() * 100000).toString();
+		let user = add_new_user(socket, name); //TODO give meaningfull name instead of number
+		if (user.error != undefined) {
+			socket.emit('registration_failed', { error: user.error, name: name });
+		}
+		else {
 			socket.emit('registration_success');
-            socket.emit('init', { base: user, count: connections });
-        }
-    });
+			socket.emit('init', { base: user, count: connections });
+		}
+	});
 
 	socket.on('send_message', (data) => { //receives message and brodcasts it to all same cluster members
 		room = main.get(socket.id).cluster_id;

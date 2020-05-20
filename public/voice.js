@@ -1,10 +1,10 @@
 let audioContext;
 if (typeof AudioContext === 'function') {
-  audioContext = new AudioContext();
+	audioContext = new AudioContext();
 } else if (typeof webkitAudioContext === 'function') {
-  audioContext = new webkitAudioContext(); // eslint-disable-line new-cap
+	audioContext = new webkitAudioContext(); // eslint-disable-line new-cap
 } else {
-  console.log('Sorry! Web Audio not supported.');
+	console.log('Sorry! Web Audio not supported.');
 }
 
 // create a filter node
@@ -21,26 +21,26 @@ var gainNode = audioContext.createGain();
 gainNode.gain.value = 0.5;
 
 
-navigator.mediaDevices.getUserMedia({audio: true}, (stream) => {
-    // Create an AudioNode from the stream
-    const mediaStreamSource =
-      audioContext.createMediaStreamSource(stream);
-    mediaStreamSource.connect(filterNode);
-    filterNode.connect(gainNode);
-    // connect the gain node to the destination (i.e. play the sound)
-    gainNode.connect(audioContext.destination);
+navigator.mediaDevices.getUserMedia({ audio: true }, (stream) => {
+	// Create an AudioNode from the stream
+	const mediaStreamSource =
+		audioContext.createMediaStreamSource(stream);
+	mediaStreamSource.connect(filterNode);
+	filterNode.connect(gainNode);
+	// connect the gain node to the destination (i.e. play the sound)
+	gainNode.connect(audioContext.destination);
 });
 
-const  connection=new RTCPeerConnection();
+const connection = new RTCPeerConnection();
 
-function callUser(socketId){
-    if(!alreadyCalled(socketId)){
-        connection.addTrack();
-    }
+function callUser(socketId) {
+	if (!alreadyCalled(socketId)) {
+		connection.addTrack();
+	}
 }
 
 socket.on("disconnect", () => {
-    connection.removeTrack();
+	connection.removeTrack();
 
 });
 

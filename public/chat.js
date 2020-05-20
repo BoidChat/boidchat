@@ -1,14 +1,13 @@
 function sendMessage(evt) {
 	if (evt.keyCode === 13) {
-		if(evt.target.value != "")
+		if (evt.target.value != "")
 			socket.emit('send_message', evt.target.value);
 		evt.target.value = "";
 	}
 }
 
-function sendButton(){
-	if(document.getElementById("textBox").value != "")
-	{
+function sendButton() {
+	if (document.getElementById("textBox").value != "") {
 		socket.emit('send_message', document.getElementById("textBox").value);
 	}
 	document.getElementById("textBox").value = "";
@@ -46,7 +45,7 @@ function linkify(text, element) {
     });
 }
 
-function hideChat(){
+function hideChat() {
 	document.getElementById("chatBox").style.visibility = "hidden";
 	let head = document.getElementById("chatHeader");
 	head.style.bottom = document.getElementById("textBox").offsetHeight + "px";
@@ -55,7 +54,7 @@ function hideChat(){
 
 }
 
-function showChat(){
+function showChat() {
 	document.getElementById("chatBox").style.visibility = "visible";
 	let head = document.getElementById("chatHeader");
 	head.style.bottom = document.getElementById("chatBox").offsetHeight + head.offsetHeight +"px" ;
@@ -70,8 +69,8 @@ function onWindowResize(){
 	if(document.getElementById("chatBox").style.getPropertyValue("visibility") == "hidden"){
 		head.style.bottom = document.getElementById("textBox").offsetHeight + "px";
 	}
-	else{
-		head.style.bottom = document.getElementById("chatBox").offsetHeight + head.offsetHeight +"px" ;
+	else {
+		head.style.bottom = document.getElementById("chatBox").offsetHeight + head.offsetHeight + "px";
 	}
 }
 
