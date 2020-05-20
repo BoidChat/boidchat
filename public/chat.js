@@ -37,6 +37,7 @@ socket.on('receive_message', (data, name) => {
 	let nameT = document.createElement("span");
 	time.id = "messageTime";
 	nameT.id = "messageName";
+	nameT.style.color = text_to_color(name);
 	node.id = "messageText";
 	nameT.innerText = name + ":";
 	let marked_text = linkify(data);

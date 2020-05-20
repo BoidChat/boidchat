@@ -7,8 +7,9 @@ socket.on('cluster_info', (data) => {
 		let div = document.createElement("div");
 		div.id = "flockers" + i;
 		let node = document.createElement("p");
-		node.innerHTML = '<font color="FFFFFF">' + data[i];
+		node.innerHTML = data[i];
 		node.style.display = "inline-block";
+		node.style.color = text_to_color(data[i]);
 		div.appendChild(node);
 		if (i != -1) {
 			let bl = document.createElement("button");
