@@ -92,14 +92,14 @@ canvas {
 	background: rgba(24, 24, 24, 0.2);
 }
 #messageName{
-	width: auto; 
+	width: auto;
 	display: block;
 	padding: 0;
 	margin-left: 10px;
 	margin-top: 2px;
 }
 #messageText{
-	width: 70%; 
+	width: 70%;
 	word-wrap: break-word;
 	color: white;
 	display: block;

@@ -6,14 +6,23 @@ String.prototype.hashCode = function() {
 	return Math.abs(hash);
 };
 
-function text_to_color(text) {
-	let hash = text.hashCode();
-	let r = (hash & 255).toString(16); if (r.length & 1) r = "0" + r;
-	let g = ((hash >>= 8) & 255).toString(16); if (g.length & 1) g = "0" + g;
-	let b = ((hash >> 8) & 255).toString(16); if (b.length & 1) b = "0" + b;
-	return "#" + r + g + b;
+function map_range(x, in_min, in_max, out_min, out_max) {
+	return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
-let lastMesg = "";
+
+function text_to_color(text) {
+	const hash = text.hashCode(), min_b = 150;
+	let r = hash & 255, g = (hash >>> 8) & 255, b = (hash >>> 16) & 255;
+	if (g > b) {
+		if (g > r) g = Math.round(map_range(g, 0, 255, min_b, 255));
+		else r = Math.round(map_range(r, 0, 255, min_b, 255));
+	} else {
+		if (b > r) b = Math.round(map_range(b, 0, 255, min_b, 255));
+		else r = Math.round(map_range(r, 0, 255, min_b, 255));
+	}
+	return "#" + r.toString(16).padStart(2, "0") + g.toString(16).padStart(2, "0") + b.toString(16).padStart(2, "0");
+}
+
 function sendMessage(evt) {
 	if (evt.keyCode === 13) {
 		if (evt.target.value != "")

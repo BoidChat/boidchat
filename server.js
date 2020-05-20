@@ -3,7 +3,7 @@ const http = require('http');
 const socket = require('socket.io');
 const os = require('os');
 const hostname = os.networkInterfaces();
-const port = 80;
+const port = 8080;
 
 const app = express();
 const server = http.createServer(app);
@@ -72,7 +72,7 @@ function get_rand_name() {
 //use when user connects first time
 function add_new_user(socket, name) {
 	let values = Array.from(main.values());
-	if(name.trim() == "") return { error: 'Vardas negalimas', name: name };
+	if (name.trim() == "") return { error: 'Vardas negalimas', name: name };
 	for (let i = 0; i < values.length; i++) {
 		if (values[i].name.trim().toLowerCase() == name.trim().toLowerCase()) { return { error: 'Vardas užimtas', name: name }; }
 	}
