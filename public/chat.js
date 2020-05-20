@@ -13,7 +13,7 @@ function text_to_color(text) {
 	let b = ((hash >> 8) & 255).toString(16); if (b.length & 1) b = "0" + b;
 	return "#" + r + g + b;
 }
-
+let lastMesg = "";
 function sendMessage(evt) {
 	if (evt.keyCode === 13) {
 		if (evt.target.value != "")

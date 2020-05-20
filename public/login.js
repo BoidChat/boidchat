@@ -29,6 +29,7 @@ loginUser(e) {
 }*/
 
 socket.on('registration_failed', (response) => { // response.error contains error message
+	document.getElementById("username").value = "";
 	let message = response.error + ": " + response.name;
 	let parent = document.querySelector(".modal-footer");
 	let error_element = document.getElementById("error_message");
