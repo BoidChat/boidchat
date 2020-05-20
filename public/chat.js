@@ -1,3 +1,19 @@
+String.prototype.hashCode = function() {
+	let hash = 0;
+	for (let i = 0; i < this.length; i++) {
+		hash += this.charCodeAt(i) * 999331;
+	}
+	return Math.abs(hash);
+};
+
+function text_to_color(text) {
+	let hash = text.hashCode();
+	let r = (hash & 255).toString(16); if (r.length & 1) r = "0" + r;
+	let g = ((hash >>= 8) & 255).toString(16); if (g.length & 1) g = "0" + g;
+	let b = ((hash >> 8) & 255).toString(16); if (b.length & 1) b = "0" + b;
+	return "#" + r + g + b;
+}
+
 function sendMessage(evt) {
 	if (evt.keyCode === 13) {
 		if (evt.target.value != "")
