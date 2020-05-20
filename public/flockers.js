@@ -10,7 +10,7 @@ socket.on('cluster_info', (data) => {
 		node.innerHTML = '<font color="FFFFFF">' + data[i];
 		node.style.display = "inline-block";
 		div.appendChild(node);
-		if(i != -1){
+		if (i != -1) {
 			let bl = document.createElement("button");
 			bl.id = "blockButton";
 			bl.textContent = "Blokuoti";

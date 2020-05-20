@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html>
 <meta name="viewport" content="width=device-width">
+
 <head lang="en">
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+		integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 	<link rel="stylesheet" type="text/css" href="style.css">
 	<meta charset="utf-8">
 	</meta>
@@ -20,32 +22,40 @@
 </head>
 
 <body id="canvas">
-	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-	  <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+		crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+		integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+		crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+		integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+		crossorigin="anonymous"></script>
+	<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+		aria-hidden="true" data-keyboard="false" data-backdrop="static">
 		<div class="modal-dialog" role="document">
 			<img id="frontLogo" src="images/logos/Logo.png">
-		  <div class="modal-content">
-			<div class="modal-header">
-			  <h5 class="modal-title" id="exampleModalLabel">Sveiki!</h5>
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Sveiki!</h5>
+				</div>
+				<div class="modal-body">
+					<label for="username">Vartojo vardas: </label><br>
+					<input type="text" maxlength="15" id="username" /> <br>
+				</div>
+				<div class="modal-footer">
+					<button type="submit" value="Submit" class="btn btn-outline-dark"
+						onmouseup="registration(document.getElementById('username').value)">Prisijungti</button>
+				</div>
 			</div>
-			<div class="modal-body">
-				<label for="username" >Vartojo vardas: </label><br>
-				<input type="text"  maxlength="15" id="username"/> <br>
-			</div>
-			<div class="modal-footer">
-				<button type="submit" value="Submit" class="btn btn-outline-dark" onmouseup="registration(document.getElementById('username').value)">Prisijungti</button>
-			</div>
-		  </div>
 		</div>
-	  </div>
-	  <script type="text/javascript">
-		$(window).on('load',function(){
+	</div>
+	<script type="text/javascript">
+		$(window).on('load', function() {
 			$('#loginModal').modal('show');
 		});
 	</script>
-	
+
 	<!--<ng-template #content let-c="close" let-d="dismiss">
 		<div class="modal-header">
 		  <h4 class="modal-title" id="modal-basic-title">Welcome!</h4>
