@@ -83,23 +83,42 @@ canvas {
 
 	display: inline-block;
 }
-#messageText{
+#message{
 	width: 100%;
-	float:left;
-	margin: auto;
+	float: left;
+	border: 1px solid rgba(94, 94, 94, 0.2);
+	padding: 0;
+	margin: 0;
+	vertical-align: baseline;
+}
+#messageName{
+	width: auto; 
+	color: white;
+	border: 1px solid rgba(94, 94, 94, 0.2);
+	display: block;
+	padding: 0;
+	margin: 0;
 }
 #messageText{
-	width: 80%; 
-	float:left;
+	width: 70%; 
 	word-wrap: break-word;
+	border: 1px solid rgba(94, 94, 94, 0.2);
 	color: white;
-	margin: auto;
+	display: block;
+	padding: 0;
+	margin: 0;
+	float: left;
 }
 #messageTime{
-	width: auto;
-	color: rgba(20, 20, 20, 0.2);
-	display: inline-block;
+	width: 40px;
+	border: 1px solid rgba(94, 94, 94, 0.2);
+	color: rgba(20, 20, 20, 0.8);
+	overflow: clip;
+	display: block;
+	text-align: right;
 	float: right;
+	padding: 0;
+	margin: 0;
 }
 
 #flockers{
@@ -173,16 +192,6 @@ canvas {
 	left: 0px;
 	bottom: 0;
 }
-#headerSpacing{
-	padding: 10px;
-	margin: 0px;
-	width: 100%;
-	height: 100%;
-	max-height: 40px;
-	min-height: 20px;
-	min-width: 200px;
-	max-width: 400px;
-}
 #minmize{
 	background: rgba(24, 24, 24, 0);
 	border: 0px;
@@ -210,7 +219,7 @@ canvas {
 }
 
 #blockButton{
-	display: inline-block;
+	display: block;
 	background: rgba(24, 24, 24, 0.2);
 	border: 1px solid rgba(94, 94, 94, 0.2);
 	height: auto;

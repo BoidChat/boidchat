@@ -15,18 +15,25 @@ function sendButton() {
 
 socket.on('receive_message', (data, name) => {
 	let div = document.createElement("div");
-	let node = document.createElement("p");
-	let time = document.createElement("p");
+	div.id = "message";
+	let node = document.createElement("span");
+	let time = document.createElement("span");
+	let nameT = document.createElement("span");
+	time.id = "messageTime";
+	nameT.id = "messageName";
 	node.id = "messageText";
-	let marked_text = name + ": " + linkify(data);
+	nameT.innerText = name + ":";
+	let marked_text = linkify(data);
 	let today = new Date();
 	let h = today.getHours();
 	let m = today.getMinutes();
+	h = checkTime(h);
 	m = checkTime(m);
 	time.innerText = h + ":" + m;
 	node.innerHTML = marked_text;
 	let chat = document.getElementById("chatBox");
 	let toScroll = chat.scrollTop + chat.clientHeight - chat.scrollHeight;
+	div.appendChild(nameT);
 	div.appendChild(node);
 	div.appendChild(time);
 	chat.appendChild(div);
