@@ -53,7 +53,7 @@ canvas {
 	width: 30%;
 	height: 50%;
 	max-height: 600px;
-	min-height: 300px;
+	min-height: 50px;
 	min-width: 200px;
 	max-width: 400px;
 
@@ -84,11 +84,12 @@ canvas {
 	display: inline-block;
 }
 
-#chat{
-	width: 80%; 
+#message{
+	width: 100%; 
 	float:left;
 	word-wrap: break-word;
 	color: white;
+	margin: auto;
 }
 
 #flockers{
@@ -101,9 +102,9 @@ canvas {
 	padding: 10px;
 	margin: 0px;
 	width: 30%;
-	height: 20%;
-	max-height: 200px;
-	min-height: 100px;
+	height: 30%;
+	max-height: 400px;
+	min-height: 50px;
 	min-width: 200px;
 	max-width: 400px;
 
@@ -145,7 +146,7 @@ canvas {
 	visibility: hidden;
 	background: rgba(24, 24, 24, 0.2);
 	border: 1px solid rgba(94, 94, 94, 0.2);
-
+	color: white;
 	overflow: clip;
 
 	padding: 10px;
@@ -157,6 +158,7 @@ canvas {
 	min-width: 200px;
 	max-width: 400px;
 
+	z-index: 3;
 	position: absolute;
 	left: 0px;
 	bottom: 0;

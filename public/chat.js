@@ -16,10 +16,14 @@ function sendButton(){
 
 socket.on('receive_message', (data, name) => {
 	var node = document.createElement("p");
-	node.id = "chat";
+	node.id = "message";
 	let marked_text = name + ": " + linkify(data);
 	node.innerHTML = marked_text;
-	document.getElementById("chatBox").appendChild(node);
+	var chat = document.getElementById("chatBox");
+	var toScroll = chat.scrollTop + chat.clientHeight - chat.scrollHeight;
+	chat.appendChild(node);
+	if(toScroll > -20 && toScroll < 20)
+		chat.scrollTop = chat.scrollHeight;
 });
 
 function linkify(text, element) {
