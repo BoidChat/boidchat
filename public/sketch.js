@@ -4,6 +4,8 @@ let plane;
 let ready = false;
 let main_boid = undefined;
 let boid_base = undefined;
+let name_font = undefined;
+let name_meshes = new Map();
 
 const socket = io.connect();
 
@@ -17,9 +19,9 @@ const camera_queue = new ML_Queue(60);
 const mouse_queue = new ML_Queue(60);
 
 
-scene.background = new THREE.CubeTextureLoader().setPath('images/panorama/').load(['px.png', 'nx.png',
-	'py.png', 'ny.png', 'pz.png', 'nz.png']);
-scene.background.minFilter = THREE.LinearFilter;
+// scene.background = new THREE.CubeTextureLoader().setPath('images/panorama/').load(['px.png', 'nx.png',
+// 	'py.png', 'ny.png', 'pz.png', 'nz.png']);
+// scene.background.minFilter = THREE.LinearFilter;
 // not live animation
 var notLive = true;
 camera.position.x = 0;
@@ -45,6 +47,46 @@ loadingManager.onLoad = function() { //triggers when plane model is loaded
 	main_boid.geom.rotation.reorder("YXZ");//requered orientation
 	ready = true;
 };
+
+
+let loader = new THREE.FontLoader();
+	loader.load( 'fonts/helvetiker_regular.typeface.json', function ( font ) {
+		name_font = font;
+		// var xMid, text;
+		// var color = new THREE.Color( 0x006699 );
+		// var matLite = new THREE.MeshBasicMaterial( {
+		// 	color: color,
+		// 	transparent: true,
+		// 	opacity: 0.6,
+		// 	side: THREE.DoubleSide
+		// } );
+		// var message = "   Three.js\nStroke text.";
+		// var shapes = font.generateShapes( message, 30 );
+		// var geometry = new THREE.ShapeBufferGeometry( shapes );
+		// geometry.computeBoundingBox();
+		// xMid = - 0.5 * ( geometry.boundingBox.max.x - geometry.boundingBox.min.x );
+		// geometry.translate( xMid, 0, 0 );
+		// // make shape ( N.B. edge view not visible )
+		// text = new THREE.Mesh( geometry, matLite );
+		// text.position.z = - 30;
+		// scene.add( text );
+	} );
+
+function create_fonted_name(name){
+	let color = new THREE.Color( text_to_color(name) );
+	let matLite = new THREE.MeshBasicMaterial( {
+		color: color,
+		transparent: true,
+		opacity: 0.8,
+		side: THREE.DoubleSide
+	} );
+	let message = name;
+	let shapes = name_font.generateShapes( message, 0.3);
+	let geometry = new THREE.ShapeBufferGeometry( shapes );
+	geometry.computeBoundingBox();
+	let text = new THREE.Mesh( geometry, matLite );
+	return text;
+}
 
 const objLoader = new THREE.OBJLoader(loadingManager);
 objLoader.setPath('models/');
@@ -98,24 +140,47 @@ socket.on('live', (d) => {
 		notLive = false;
 		data = d; //TODO need to put as argument to 'animate' instead of global varieble
 		inter_data = interpolate(data, main_boid.id);
+		fix_name_meshes();
 		let my_data = main_boid.live(data);
 		socket.emit('update_info', my_data);
 		requestAnimationFrame(animate);
 	}
 });
-// socket.on('registration_failed', (response) => { // response.error contains error message
-// 	let name = undefined;
-// 	//your code in case of registration failure here
-// 	socket.emit('register' , Math.floor(Math.random() * 100000).toString()/**insert user name here as parameter*/); //sends request to server to create new boid, initialisation
-// 	// socket.emit('register' , name); //sends request to server to create new boid, initialisation
-// });
 
-// function registration(name){
-// 	//socket.emit('register' , Math.floor(Math.random() * 100000).toString()/**insert user name here as parameter*/); //sends request to server to create new boid, initialisation
-// 	socket.emit('register' , name); //sends request to server to create new boid, initialisation
-// }
+function fix_name_meshes(){
+	let name_meshes_keys = Array.from(name_meshes.keys())
+	for(let i = 0; i < name_meshes_keys.length; i++){
+		let int_name_mesh = interp_users.get(name_meshes_keys[i]);
+		if(int_name_mesh == undefined){
+			scene.remove(name_meshes.get(name_meshes_keys[i]).mesh);
+			name_meshes.delete(name_meshes_keys[i]) //deletes
+		}
+		else{
+			let vect_to_camera = (int_name_mesh.position.clone().sub(camera.position)).normalize();
+			let u = name_meshes.get(name_meshes_keys[i]);
+			half_length = - 0.5 * ( u.mesh.geometry.boundingBox.max.x - u.mesh.geometry.boundingBox.min.x );
+			let x = -half_length * vect_to_camera.z
+			let z = half_length * vect_to_camera.x
+			
+			u.mesh.position.set(int_name_mesh.position.x + x, int_name_mesh.position.y + 2, int_name_mesh.position.z + z);//updates
+			u.position = int_name_mesh.position;
+			let body_y_matrix = (new THREE.Matrix4()).makeRotationFromQuaternion((new THREE.Quaternion()).setFromUnitVectors(new THREE.Vector3(0, 0, -1), (new THREE.Vector3(vect_to_camera.x, 0, vect_to_camera.z).normalize())));
+			u.mesh.rotation.setFromRotationMatrix(body_y_matrix);
+		}
+	}
+	let interp_keys = Array.from(interp_users.keys())
+	for(let i = 0; i < interp_keys.length; i++){
+		let interp = name_meshes.get(name_meshes_keys[i]);
+		if(interp == undefined){
+			let interp_user = interp_users.get(interp_keys[i]);
+			let name_mesh = create_fonted_name(interp_user.name);
+			name_mesh.position.set(interp_user.position.x, interp_user.position.y, interp_user.position.z);
+			name_meshes.set(interp_user.id, {name: interp_user.name, position: interp_user.position, mesh: name_mesh}); // adds
+			scene.add(name_mesh);
 
-//registration("username");
+		}
+	}
+}
 
 function animate() {
 

@@ -9,13 +9,13 @@ function update_users(data, time_now, id) {
 			let _pos = to_vector3(data[i].position);
 			let vel = to_vector3(data[i].velocity);
 			if (user == undefined) {
-				new_users.set(data[i].id, { id: data[i].id, dest_pos: _pos, position: _pos, velocity: vel, sync_int: data[i].sync_int, time: time_now });
+				new_users.set(data[i].id, { id: data[i].id, name:data[i].name, dest_pos: _pos, position: _pos, velocity: vel, sync_int: data[i].sync_int, time: time_now });
 			}
 			else if (data[i].sync_int == user.sync_int) {
-				new_users.set(data[i].id, { id: data[i].id, dest_pos: user.dest_pos, position: user.position, velocity: user.velocity, sync_int: data[i].sync_int, time: user.time });
+				new_users.set(data[i].id, { id: data[i].id, name:data[i].name, dest_pos: user.dest_pos, position: user.position, velocity: user.velocity, sync_int: data[i].sync_int, time: user.time });
 			}
 			else {
-				new_users.set(data[i].id, { id: data[i].id, dest_pos: _pos, position: user.position, velocity: vel, sync_int: data[i].sync_int, time: time_now });
+				new_users.set(data[i].id, { id: data[i].id, name:data[i].name, dest_pos: _pos, position: user.position, velocity: vel, sync_int: data[i].sync_int, time: time_now });
 			}
 		}
 	}
