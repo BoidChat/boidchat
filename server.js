@@ -215,7 +215,6 @@ function create_obstacles() {
 	}
 	return obstacles;
 }
-
 io.sockets.on('connection', (socket) => {
 	connections++;
 	console.log('New connection ' + socket.id);
@@ -229,6 +228,7 @@ io.sockets.on('connection', (socket) => {
 		}
 		else {
 			socket.emit('registration_success');
+			socket.emit('myName', main.get(socket.id).name);
 			socket.emit('init', { base: user, count: connections });
 		}
 	});
@@ -236,6 +236,9 @@ io.sockets.on('connection', (socket) => {
 	socket.on('send_message', (data) => { //receives message and brodcasts it to all same cluster members
 		room = main.get(socket.id).cluster_id;
 		io.in(room).emit('receive_message', data, main.get(socket.id).name);
+	});
+	socket.on('getMyName', () => {
+		socket.emit('myName', main.get(socket.id).name);
 	});
 
 	socket.on('update_info', (data) => { //updates user information on the server side

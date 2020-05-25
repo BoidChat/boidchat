@@ -37,34 +37,52 @@ function sendButton() {
 	}
 	document.getElementById("textBox").value = "";
 }
-
+let blocked = [];
+function block(evt){
+	blocked.push(evt.target.value);
+}
+function unBlock(evt){
+	for(let i = 0; i < blocked.length; i++){
+		if(blocked[i] == evt.target.value){
+			blocked.splice(i,1);
+		}
+	}
+}
 socket.on('receive_message', (data, name) => {
-	let div = document.createElement("div");
-	div.id = "message";
-	let node = document.createElement("span");
-	let time = document.createElement("span");
-	let nameT = document.createElement("span");
-	time.id = "messageTime";
-	nameT.id = "messageName";
-	nameT.style.color = text_to_color(name);
-	node.id = "messageText";
-	nameT.innerText = name + ":";
-	let marked_text = linkify(data);
-	let today = new Date();
-	let h = today.getHours();
-	let m = today.getMinutes();
-	h = checkTime(h);
-	m = checkTime(m);
-	time.innerText = h + ":" + m;
-	node.innerHTML = marked_text;
-	let chat = document.getElementById("chatBox");
-	let toScroll = chat.scrollTop + chat.clientHeight - chat.scrollHeight;
-	div.appendChild(nameT);
-	div.appendChild(node);
-	div.appendChild(time);
-	chat.appendChild(div);
-	if (toScroll > -20 && toScroll < 20)
-		chat.scrollTop = chat.scrollHeight;
+	let notBlocked = true;
+	for(let i = 0; i < blocked.length; i++){
+		if(name == blocked[i]){
+			notBlocked = false;
+		}
+	}
+	if(notBlocked){
+		let div = document.createElement("div");
+			div.id = "message";
+			let node = document.createElement("span");
+			let time = document.createElement("span");
+			let nameT = document.createElement("span");
+			time.id = "messageTime";
+			nameT.id = "messageName";
+			nameT.style.color = text_to_color(name);
+			node.id = "messageText";
+			nameT.innerText = name + ":";
+			let marked_text = linkify(data);
+			let today = new Date();
+			let h = today.getHours();
+			let m = today.getMinutes();
+			h = checkTime(h);
+			m = checkTime(m);
+			time.innerText = h + ":" + m;
+			node.innerHTML = marked_text;
+			let chat = document.getElementById("chatBox");
+			let toScroll = chat.scrollTop + chat.clientHeight - chat.scrollHeight;
+			div.appendChild(nameT);
+			div.appendChild(node);
+			div.appendChild(time);
+			chat.appendChild(div);
+			if (toScroll > -20 && toScroll < 20)
+				chat.scrollTop = chat.scrollHeight;
+	}	
 });
 function checkTime(i) {
 	if (i < 10) { i = "0" + i; };  // add zero in front of numbers < 10

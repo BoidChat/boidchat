@@ -19,9 +19,9 @@ const camera_queue = new ML_Queue(60);
 const mouse_queue = new ML_Queue(60);
 
 
-// scene.background = new THREE.CubeTextureLoader().setPath('images/panorama/').load(['px.png', 'nx.png',
-// 	'py.png', 'ny.png', 'pz.png', 'nz.png']);
-// scene.background.minFilter = THREE.LinearFilter;
+ scene.background = new THREE.CubeTextureLoader().setPath('images/panorama/').load(['px.png', 'nx.png',
+ 	'py.png', 'ny.png', 'pz.png', 'nz.png']);
+ scene.background.minFilter = THREE.LinearFilter;
 // not live animation
 var notLive = true;
 camera.position.x = 0;

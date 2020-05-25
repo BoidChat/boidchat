@@ -22,7 +22,7 @@ socket.on('registration_success', function() {
 	var gainNode = audioContext.createGain();
 	// default is 1 (no change); less than 1 means audio is attenuated
 	// and vice versa
-	gainNode.gain.value = 0.5;
+	gainNode.gain.value = 2.0;
 
 	var constraints = { audio: true, video: false };
 	navigator.getUserMedia(constraints, (stream) => {
