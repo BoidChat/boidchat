@@ -1,3 +1,7 @@
+const { RTCPeerConnection, RTCSessionDescription } = window;
+
+
+
 let audioContext;
 if (typeof AudioContext === 'function') {
 	audioContext = new AudioContext();
@@ -28,19 +32,21 @@ navigator.mediaDevices.getUserMedia({ audio: true }, (stream) => {
 	mediaStreamSource.connect(filterNode);
 	filterNode.connect(gainNode);
 	// connect the gain node to the destination (i.e. play the sound)
-	gainNode.connect(audioContext.destination);
+  gainNode.connect(audioContext.destination);
+  
 });
 
-const connection = new RTCPeerConnection();
 
-function callUser(socketId) {
-	if (!alreadyCalled(socketId)) {
-		connection.addTrack();
-	}
-}
+var audioContext = new AudioContext();
+var mediaStreamSource = audioContext.createMediaStreamSource( local_stream ),
+participant1 =  audioContext.createMediaStreamSource( participant1_stream ),
+participantN = audioContext.createMediaStreamSource( participantN_stream );
+ 
+// Send the stream to MediaStream, which needs to be connected to PC
+var destination_participant1 = audioContext.createMediaStreamDestination();
+mediaStreamSource.connect(destination_participant1); // Send local stream to the mixer
+participantN.connect(destination_participant1); // add all participants to the mix
+// Add the result stream to PC for participant1 , most likely you will want to disconnect the previous one using removeStream
+pc.addStream( destination_participant1.stream );
 
-socket.on("disconnect", () => {
-	connection.removeTrack();
-
-});
 
