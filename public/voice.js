@@ -1,7 +1,7 @@
 const { RTCPeerConnection, RTCSessionDescription } = window;
 
 
-io.sockets.on('connected', (socket) => {
+socket.on('registration_success', function() {
 let audioContext;
 if (typeof AudioContext === 'function') {
 	audioContext = new AudioContext();
@@ -24,8 +24,8 @@ var gainNode = audioContext.createGain();
 // and vice versa
 gainNode.gain.value = 0.5;
 
-
-navigator.mediaDevices.getUserMedia({ audio: true }, (stream) => {
+var constraints = {audio: true, video: false};
+navigator.getUserMedia(constraints,(stream) => {
 	// Create an AudioNode from the stream
 	const mediaStreamSource =
 		audioContext.createMediaStreamSource(stream);
@@ -34,7 +34,7 @@ navigator.mediaDevices.getUserMedia({ audio: true }, (stream) => {
 	// connect the gain node to the destination (i.e. play the sound)
   gainNode.connect(audioContext.destination);
   
-});
+},function(){console.log("failed to get media")});
 
 
 participant1 =  audioContext.createMediaStreamSource( participant1_stream ),
