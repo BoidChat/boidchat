@@ -1,7 +1,7 @@
 const { RTCPeerConnection, RTCSessionDescription } = window;
 
 
-
+io.sockets.on('connected', (socket) => {
 let audioContext;
 if (typeof AudioContext === 'function') {
 	audioContext = new AudioContext();
@@ -37,8 +37,6 @@ navigator.mediaDevices.getUserMedia({ audio: true }, (stream) => {
 });
 
 
-var audioContext = new AudioContext();
-var mediaStreamSource = audioContext.createMediaStreamSource( local_stream ),
 participant1 =  audioContext.createMediaStreamSource( participant1_stream ),
 participantN = audioContext.createMediaStreamSource( participantN_stream );
  
@@ -49,4 +47,4 @@ participantN.connect(destination_participant1); // add all participants to the m
 // Add the result stream to PC for participant1 , most likely you will want to disconnect the previous one using removeStream
 pc.addStream( destination_participant1.stream );
 
-
+});

@@ -215,18 +215,7 @@ function create_obstacles() {
 	}
 	return obstacles;
 }
-io.sockets.on("call-user", data => {
-	socket.to(data.to).emit("call-made", {
-	  offer: data.offer,
-	  socket: socket.id
-	});
-  });
-socket.on("make-answer", data => {
-	socket.to(data.to).emit("answer-made", {
-	  socket: socket.id,
-	  answer: data.answer
-	});
-  });
+
 io.sockets.on('connection', (socket) => {
 	connections++;
 	console.log('New connection ' + socket.id);
@@ -242,7 +231,6 @@ io.sockets.on('connection', (socket) => {
 			socket.emit('registration_success');
 			socket.emit('init', { base: user, count: connections });
 		}
-		//socket.emit('voice_request',?)
 	});
 
 	socket.on('send_message', (data) => { //receives message and brodcasts it to all same cluster members

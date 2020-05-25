@@ -18,11 +18,11 @@ socket.on('cluster_info', (data) => {
 			div.appendChild(bl);
 		}
 		document.getElementById("flockers").appendChild(div);
-		document.getElementById("flockers").appendChild(div.cloneNode(true));
-		document.getElementById("flockers").appendChild(div.cloneNode(true));
-		document.getElementById("flockers").appendChild(div.cloneNode(true));
-		document.getElementById("flockers").appendChild(div.cloneNode(true));
-		document.getElementById("flockers").appendChild(div.cloneNode(true));
-		document.getElementById("flockers").appendChild(div.cloneNode(true));
+		// document.getElementById("flockers").appendChild(div.cloneNode(true));
+		// document.getElementById("flockers").appendChild(div.cloneNode(true));
+		// document.getElementById("flockers").appendChild(div.cloneNode(true));
+		// document.getElementById("flockers").appendChild(div.cloneNode(true));
+		// document.getElementById("flockers").appendChild(div.cloneNode(true));
+		// document.getElementById("flockers").appendChild(div.cloneNode(true));
 	}
 });
