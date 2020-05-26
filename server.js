@@ -71,6 +71,7 @@ function get_rand_name() {
 
 //use when user connects first time
 function add_new_user(socket, name) {
+	if(name.length > 15) return { error: 'Vardas negalimas', name: name };
 	let values = Array.from(main.values());
 	if (name.trim() == "") return { error: 'Vardas negalimas', name: name };
 	for (let i = 0; i < values.length; i++) {
